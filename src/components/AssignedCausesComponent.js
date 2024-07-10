@@ -1,6 +1,7 @@
 import React from 'react';
 import BankIcon from '@mui/icons-material/AccountBalance';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Link } from 'react-router-dom';
 
 const containerStyles = {
   width: '300px',
@@ -40,6 +41,9 @@ const AssignedCausesComponent = () => {
         <div style={{ ...textStyles, paddingBottom: '18px' }}>
           SECRETARIO
         </div>
+        <div style={boldTextStyles}>
+          <Link to="/transaccion">Transacción</Link>
+        </div>
         <div style={{ backgroundColor: '#e0d3cb', padding: '10px', lineHeight: '1.5', borderRadius: '0', ...iconStyles }}>
           <BankIcon />
           <div>18824</div>
@@ -52,6 +56,9 @@ const AssignedCausesComponent = () => {
         </div>
         <div style={{ ...textStyles, paddingBottom: '18px' }}>
           SECRETARIO
+        </div>
+        <div style={boldTextStyles}>
+          <Link to="/transaccion">Transacción</Link>
         </div>
         <div style={{ backgroundColor: '#e0d3cb', padding: '10px', lineHeight: '1.5', borderRadius: '0', ...iconStyles }}>
           <BankIcon />

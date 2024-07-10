@@ -4,6 +4,11 @@ import LoginComponent from './components/LoginComponent';
 import HeaderComponent from './components/HeaderComponent';
 import LateralMenuComponent from './components/LateralMenuComponent';
 import AssignedCausesComponent from './components/AssignedCausesComponent';
+import MenuTransactionComponent from './components/MenuTransactionComponent';
+import RequireDataComponent from './components/RequireDataComponent';
+import RetentionOrderComponent from './components/RetentionOrderComponent';
+import ReleaseOrderComponent from './components/ReleaseOrderComponent';
+import SeizureOrderComponent from './components/SeizureOrderComponent';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -20,17 +25,36 @@ function App() {
   return (
     <Router>
       <div className="App" style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-        {/* Renderizar el componente HeaderComponent solo si el usuario ha iniciado sesión */}
         {isLoggedIn && <HeaderComponent />}
         <Routes>
           <Route path="/" element={<LoginComponent onLogin={handleLogin} />} />
           <Route
-            path="/main"
+            path="/main"  
             element={isLoggedIn ? <LateralMenuComponent /> : <Navigate to="/login" />}
           />
           <Route
             path="/causas-asignadas"
             element={isLoggedIn ? <AssignedCausesComponent /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/transaccion"
+            element={isLoggedIn ? <MenuTransactionComponent /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/requerir-datos-cuenta"
+            element={isLoggedIn ? <RequireDataComponent /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/orden-retencion"
+            element={isLoggedIn ? <RetentionOrderComponent /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/orden-liberacion"
+            element={isLoggedIn ? <ReleaseOrderComponent /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/orden-embargo"
+            element={isLoggedIn ? <SeizureOrderComponent /> : <Navigate to="/" />}
           />
         </Routes>
       </div>
