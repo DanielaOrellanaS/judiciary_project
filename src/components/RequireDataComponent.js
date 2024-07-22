@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import '../components.css';
-import { getJudgment, saveJudgment } from '../Api';
+import { getBankResponse, getJudgment, saveJudgment } from '../Api';
+import { useLocation } from 'react-router-dom';
 
 const RequireDataComponent = () => {
+
+  const location = useLocation();
+  const { numJudgment } = location.state || {};
+
   const [formData, setFormData] = useState({
-    numJudgment: '',
+    numJudgment: numJudgment || '0',
     adjudicated: '',
     judge: '',
     identificationType: '',
@@ -12,20 +17,45 @@ const RequireDataComponent = () => {
     name: '',
   });
 
-  const [judgmentData, setJudgmentData] = useState([]);
+  const [combinedData, setCombinedData] = useState([]);
   
   const getCurrentDate = () => {
     const date = new Date();
     return date.toISOString().split('T')[0]; 
   };
 
+  function generateRandomOffice() {
+    const randomPart = Math.floor(10000 + Math.random() * 90000); 
+    const year = new Date().getFullYear(); 
+    const suffix = Math.floor(100 + Math.random() * 900); 
+    return `UJC-${randomPart}-${year}-${suffix}`;
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getJudgment();
-        setJudgmentData(data);
+        const judgmentData = await getJudgment();
+
+        const bankData = await getBankResponse();
+        if (bankData.length > 0) {
+          const combined = judgmentData.map(item => {
+            const randomIndex = Math.floor(Math.random() * bankData.length);
+            const randomBankResponse = bankData[randomIndex];
+            
+            return {
+              ...item,
+              accountType: randomBankResponse.accountType,
+              bank: randomBankResponse.bank,
+              accountNum: randomBankResponse.accountNum,
+              accountStatus: randomBankResponse.accountStatus,
+              responseDate: randomBankResponse.responseDate
+            };
+          });
+
+          setCombinedData(combined);
+        }
       } catch (error) {
-        console.error('Error fetching judgment:', error);
+        console.error('Error fetching data:', error);
       }
     };
 
@@ -44,9 +74,14 @@ const RequireDataComponent = () => {
     event.preventDefault();
     try {
       const response = await saveJudgment(formData);
-      console.log('Judgment saved successfully:', response);
+      if (response.ok) {
+        alert('Datos guardados correctamente.');
+      } else {
+        alert('Hubo un problema al guardar los datos.');
+      }
     } catch (error) {
-      console.error('Error saving judgment:', error);
+      console.error('Datos incompletos', error);
+      alert('Error al guardar los datos: ' + error.message);
     }
   };
 
@@ -79,8 +114,8 @@ const RequireDataComponent = () => {
             type="text"
             id="oficio"
             name="oficio"
-            value={Math.floor(1000 + Math.random() * 9000).toString()} 
-            readOnly 
+            value={generateRandomOffice()}
+            readOnly
           />
         </div>
         <div className="form-group">
@@ -90,7 +125,7 @@ const RequireDataComponent = () => {
             id="mail"
             name="mail"
             value={"jsegalla@cnj.gob.ec"}
-            readOnly 
+            readOnly
           />
         </div>
         <div className="form-group">
@@ -111,6 +146,7 @@ const RequireDataComponent = () => {
             name="numJudgment"
             value={formData.numJudgment}
             onChange={handleInputChange}
+            readOnly
           />
         </div>
         <div className="form-group">
@@ -131,6 +167,7 @@ const RequireDataComponent = () => {
             value={formData.identificationType}
             onChange={handleInputChange}
           >
+            <option value="">Seleccione...</option>
             <option value="cedula">Cédula</option>
             <option value="pasaporte">Pasaporte</option>
             <option value="ruc">RUC</option>
@@ -165,7 +202,6 @@ const RequireDataComponent = () => {
         <thead>
           <tr>
             <th>Nombres</th>
-            <th>Apellidos</th>
             <th>Tipo identificación</th>
             <th>Identificación</th>
             <th>Tipo de cuenta</th>
@@ -176,17 +212,16 @@ const RequireDataComponent = () => {
           </tr>
         </thead>
         <tbody>
-          {judgmentData.map((item) => (
+          {combinedData.map((item) => (
             <tr key={item.idJudgment}>
               <td>{item.name}</td>
-              <td>{item.lastname}</td>
               <td>{item.identificationType}</td>
               <td>{item.identification}</td>
               <td>{item.accountType}</td>
               <td>{item.bank}</td>
-              <td>{item.accountNumber}</td>
+              <td>{item.accountNum}</td>
               <td>{item.accountStatus}</td>
-              <td>{item.responseDate}</td>
+              <td>{new Date(item.responseDate).toLocaleDateString()}</td>
             </tr>
           ))}
         </tbody>

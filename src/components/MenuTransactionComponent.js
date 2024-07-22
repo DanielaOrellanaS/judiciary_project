@@ -1,8 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import '../components.css';
 
 const MenuTransactionComponent = () => {
+
+  const location = useLocation();
+  const { numJudgment } = location.state || {};
+
   const options = [
     { label: 'Requerir Datos Cuenta', path: '/requerir-datos-cuenta' },
     { label: 'Orden Retención', path: '/orden-retencion' },
@@ -13,7 +17,12 @@ const MenuTransactionComponent = () => {
   return (
     <div className="menu-transaction-container">
       {options.map((option, index) => (
-        <Link key={index} to={option.path} className="menu-option">
+        <Link 
+          key={index} 
+          to={option.path} 
+          state={{ numJudgment }} 
+          className="menu-option"
+        >
           {option.label}
         </Link>
       ))}

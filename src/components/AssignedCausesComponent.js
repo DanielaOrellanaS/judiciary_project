@@ -32,40 +32,36 @@ const iconStyles = {
 };
 
 const AssignedCausesComponent = () => {
+  const causes = [
+    { number: '18824', path: '/transaccion' },
+    { number: '18825', path: '/transaccion' },
+  ];
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-      <div style={{ ...containerStyles, marginBottom: '20px' }}>
-        <div style={boldTextStyles}>
-          UNIDAD JUDICIAL CIVIL CON SEDE EN LA PARROQUIA CARCELEN DEL DISTRITO METROPOLITANO DE QUITO, PROVINCIA DE PICHINCHA
+      {causes.map((cause) => (
+        <div key={cause.number} style={containerStyles}>
+          <div style={boldTextStyles}>
+            UNIDAD JUDICIAL CIVIL CON SEDE EN LA PARROQUIA CARCELEN DEL DISTRITO METROPOLITANO DE QUITO, PROVINCIA DE PICHINCHA
+          </div>
+          <div style={{ ...textStyles, paddingBottom: '18px' }}>
+            SECRETARIO
+          </div>
+          <div style={boldTextStyles}>
+            <Link 
+              to={cause.path}
+              state={{ numJudgment: cause.number }} // Pasar el número como estado
+            >
+              Transacción
+            </Link>
+          </div>
+          <div style={{ backgroundColor: '#e0d3cb', padding: '10px', lineHeight: '1.5', borderRadius: '0', ...iconStyles }}>
+            <BankIcon />
+            <div>{cause.number}</div>
+            <ExpandMoreIcon />
+          </div>
         </div>
-        <div style={{ ...textStyles, paddingBottom: '18px' }}>
-          SECRETARIO
-        </div>
-        <div style={boldTextStyles}>
-          <Link to="/transaccion">Transacción</Link>
-        </div>
-        <div style={{ backgroundColor: '#e0d3cb', padding: '10px', lineHeight: '1.5', borderRadius: '0', ...iconStyles }}>
-          <BankIcon />
-          <div>18824</div>
-          <ExpandMoreIcon />
-        </div>
-      </div>
-      <div style={containerStyles}>
-        <div style={boldTextStyles}>
-          UNIDAD JUDICIAL CIVIL CON SEDE EN LA PARROQUIA CARCELEN DEL DISTRITO METROPOLITANO DE QUITO, PROVINCIA DE PICHINCHA
-        </div>
-        <div style={{ ...textStyles, paddingBottom: '18px' }}>
-          SECRETARIO
-        </div>
-        <div style={boldTextStyles}>
-          <Link to="/transaccion">Transacción</Link>
-        </div>
-        <div style={{ backgroundColor: '#e0d3cb', padding: '10px', lineHeight: '1.5', borderRadius: '0', ...iconStyles }}>
-          <BankIcon />
-          <div>18825</div>
-          <ExpandMoreIcon />
-        </div>
-      </div>
+      ))}
     </div>
   );
 };
