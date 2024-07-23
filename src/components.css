@@ -84,3 +84,55 @@
   background-color: #f2f2f2;
   text-align: left;
 }
+
+/* ResumeTable */
+
+.resume-table-container {
+  font-size: 60%; /* Reduce el tamaño de la letra al 60% del tamaño original */
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.resume-table-container h1 {
+  font-size: 1.2em; /* Ajusta el tamaño del título si es necesario */
+}
+
+.new-button {
+  font-size: 0.9em;
+  padding: 5px 10px;
+  border: none;
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.new-button:hover {
+  background-color: #45a049;
+}
+
+.transaction-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.transaction-table th,
+.transaction-table td {
+  padding: 8px;
+  border: 1px solid #ddd;
+  text-align: left;
+  font-size: 0.9em; /* Ajusta el tamaño del texto en la tabla */
+}
+
+.transaction-table th {
+  background-color: #f4f4f4;
+}
+
+.transaction-table button {
+  font-size: 0.9em; /* Ajusta el tamaño del texto en el botón */
+}

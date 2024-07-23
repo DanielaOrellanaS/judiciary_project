@@ -50,9 +50,9 @@ const AssignedCausesComponent = () => {
           <div style={boldTextStyles}>
             <Link 
               to={cause.path}
-              state={{ numJudgment: cause.number }} // Pasar el número como estado
+              state={{ numJudgment: cause.number }} 
             >
-              Transacción
+              Transacción Bancos
             </Link>
           </div>
           <div style={{ backgroundColor: '#e0d3cb', padding: '10px', lineHeight: '1.5', borderRadius: '0', ...iconStyles }}>

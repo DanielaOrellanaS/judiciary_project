@@ -9,6 +9,7 @@ import RequireDataComponent from './components/RequireDataComponent';
 import RetentionOrderComponent from './components/RetentionOrderComponent';
 import ReleaseOrderComponent from './components/ReleaseOrderComponent';
 import SeizureOrderComponent from './components/SeizureOrderComponent';
+import ResumeTableComponent from './components/ResumeTableComponent';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -55,6 +56,10 @@ function App() {
           <Route
             path="/orden-embargo"
             element={isLoggedIn ? <SeizureOrderComponent /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/resume-table"
+            element={isLoggedIn ? <ResumeTableComponent /> : <Navigate to="/" />}
           />
         </Routes>
       </div>
