@@ -102,20 +102,6 @@
   font-size: 1.2em; /* Ajusta el tamaño del título si es necesario */
 }
 
-.new-button {
-  font-size: 0.9em;
-  padding: 5px 10px;
-  border: none;
-  background-color: #4CAF50;
-  color: white;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.new-button:hover {
-  background-color: #45a049;
-}
-
 .transaction-table {
   width: 100%;
   border-collapse: collapse;
@@ -136,3 +122,50 @@
 .transaction-table button {
   font-size: 0.9em; /* Ajusta el tamaño del texto en el botón */
 }
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.new-button,
+.save-button {
+  font-size: 0.9em;
+  padding: 10px 20px;
+  border: none;
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  margin: 0 5px;
+}
+
+.new-button:hover,
+.save-button:hover {
+  background-color: #45a049;
+}
+
+.icon-button {
+  background-color: #4CAF50;
+  color: white;
+  border-radius: 50%;
+  padding: 10px;
+  font-size: 24px;
+  border: none;
+  cursor: pointer;
+}
+
+.icon-button:hover {
+  background-color: #45a049;
+}
+
+.submit-button {
+  background-color: #2aab2e;
+  color: white;
+  padding: 10px;
+  font-size: 12px;
+  border: none;
+  cursor: pointer;
+}
+

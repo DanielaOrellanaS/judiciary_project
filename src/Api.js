@@ -30,8 +30,6 @@ async function saveJudgment(data) {
       body: JSON.stringify(data),
     });
 
-    console.log("DATA ENVIADA: ", JSON.stringify(data))
-
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData.detail || 'Failed to save judgment data');
@@ -44,6 +42,30 @@ async function saveJudgment(data) {
     throw error;
   }
 }
+
+async function updateJudgment(id, data) {
+  try {
+    const response = await fetch(`${apiUrl}/judgment/${id}/`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.detail || 'Failed to update judgment');
+    }
+
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    console.error('Error updating judgment:', error);
+    throw error;
+  }
+}
+
 
 async function getBankResponse() {
   try {
@@ -64,4 +86,50 @@ async function getBankResponse() {
   }
 }
 
-export { getJudgment, saveJudgment, getBankResponse }
+async function getOrders() {
+  try {
+    const response = await fetch(`${apiUrl}/orders/`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    if (!response.ok) {
+      throw new Error('Failed to fetch orders');
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    throw error;
+  }
+}
+
+async function saveOrders(data) {
+  try {
+    const response = await fetch(`${apiUrl}/orders/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    console.log("DATA ENVIADA DESDE SAVE ORDERS: ", JSON.stringify(data))
+
+    console.log("RESPUESTA: ", response)
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.detail || 'Failed to save orders data');
+    }
+
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    console.error('Error saving orders:', error);
+    throw error;
+  }
+}
+
+export { getJudgment, saveJudgment, updateJudgment, getBankResponse, getOrders, saveOrders }

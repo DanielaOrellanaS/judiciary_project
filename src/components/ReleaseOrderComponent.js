@@ -1,17 +1,47 @@
 import React, { useEffect, useState } from 'react';
 import '../components.css';
 import { useLocation } from 'react-router-dom';
-import { getBankResponse, getJudgment } from '../Api';
+import { getBankResponse, getJudgment, getOrders } from '../Api';
 
 const ReleaseOrderComponent = () => {
-
   const location = useLocation();
   const { numJudgment } = location.state || {};
   const [combinedData, setCombinedData] = useState([]);
+  const [tableData, setTableData] = useState({
+    numJudgment: '',
+    bank: '',
+    amount: '',
+    cta: '',
+    accountStatus: '',
+    responseDate: ''
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setTableData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+
+    if (name === 'amount' && value) {
+      updateStatusAndDate();
+    }
+  };
+
+  const updateStatusAndDate = () => {
+    const randomIndex = Math.floor(Math.random() * combinedData.length);
+    const randomBankResponse = combinedData[randomIndex];
+    
+    setTableData(prevState => ({
+      ...prevState,
+      accountStatus: randomBankResponse.accountStatus,
+      responseDate: randomBankResponse.responseDate
+    }));
+  };
 
   const getCurrentDate = () => {
     const date = new Date();
-    return date.toISOString().split('T')[0]; 
+    return date.toISOString().split('T')[0];
   };
 
   useEffect(() => {
@@ -19,19 +49,21 @@ const ReleaseOrderComponent = () => {
       try {
         const judgmentData = await getJudgment();
         const bankData = await getBankResponse();
+        const ordersData = await getOrders();
+
+        const sortedOrders = ordersData.sort((a, b) => b.idOrder - a.idOrder); 
+        const lastOrder = sortedOrders[0] || {};
 
         if (bankData.length > 0) {
           const combined = judgmentData.map(item => {
-            const randomIndex = Math.floor(Math.random() * bankData.length);
-            const randomBankResponse = bankData[randomIndex];
-            
             return {
               ...item,
-              accountType: randomBankResponse.accountType,
-              bank: randomBankResponse.bank,
-              accountNum: randomBankResponse.accountNum,
-              accountStatus: randomBankResponse.accountStatus,
-              responseDate: randomBankResponse.responseDate
+              accountType: bankData[0]?.accountType || '',
+              bank: bankData[0]?.bank || '',
+              accountNum: bankData[0]?.accountNum || '',
+              accountStatus: bankData[0]?.accountStatus || '',
+              responseDate: bankData[0]?.responseDate || '',
+              orderData: lastOrder
             };
           });
 
@@ -144,10 +176,10 @@ const ReleaseOrderComponent = () => {
             <th>Nombres</th>
             <th>Tipo identificación</th>
             <th>Identificacion</th>
-            <th>Tipo de cuenta</th>
             <th>Numero Oficio</th>
             <th>Banco</th>
             <th>Monto</th>
+            <th>Tipo de cuenta</th>
             <th>CTA</th>
             <th>Estado TX</th>
             <th>Fecha Respuesta</th>
@@ -155,16 +187,44 @@ const ReleaseOrderComponent = () => {
         </thead>
         <tbody>
           <tr>
-            <td>{formData.name}</td>
-            <td>{formData.identificationType}</td>
-            <td>{formData.identification}</td>
-            <td>{formData.accountType}</td>
+            <td>{formData.orderData.nameDefendant}</td>
+            <td>{formData.orderData.identificationTypeDefendant}</td>
+            <td>{formData.orderData.identificationDefendant}</td>
             <td>{formData.numJudgment}</td>
-            <td>{formData.bank}</td>
-            <td>{"1000"}</td>
-            <td>{"2001213"}</td>
-            <td>{formData.accountStatus}</td>
-            <td>{new Date(formData.responseDate).toLocaleDateString()}</td>
+            <td>
+              <input
+                type="text"
+                name="bank"
+                value={formData.bank}
+                onChange={handleInputChange}
+              />
+            </td>
+            <td>
+              <input
+                type="text"
+                name="amount"
+                value={tableData.amount}
+                onChange={handleInputChange}
+              />
+            </td>
+            <td>
+              <input
+                type="text"
+                name="accountType"
+                value={formData.accountType}
+                onChange={handleInputChange}
+              />
+            </td>
+            <td>
+              <input
+                type="text"
+                name="cta"
+                value={formData.accountNum}
+                onChange={handleInputChange}
+              />
+            </td>
+            <td>{tableData.accountStatus}</td>
+            <td>{tableData.responseDate ? new Date(tableData.responseDate).toLocaleDateString() : ''}</td>
           </tr>
         </tbody>
       </table>

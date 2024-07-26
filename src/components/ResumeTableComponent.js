@@ -6,10 +6,10 @@ import { getBankResponse, getJudgment } from '../Api';
 const ResumeTableComponent = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { title } = location.state || {};
+  const { title, numJudgment } = location.state || {}; 
 
   const [combinedData, setCombinedData] = useState([]);
-
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -110,16 +110,16 @@ const ResumeTableComponent = () => {
   const handleNewButtonClick = () => {
     switch (title) {
       case 'Requerir Datos Cuenta':
-        navigate('/requerir-datos-cuenta');
+        navigate('/requerir-datos-cuenta', { state: { numJudgment } }); 
         break;
       case 'Orden Retención':
-        navigate('/orden-retencion');
+        navigate('/orden-retencion', { state: { numJudgment } }); 
         break;
       case 'Orden de Liberación':
-        navigate('/orden-liberacion');
+        navigate('/orden-liberacion', { state: { numJudgment } }); 
         break;
       case 'Orden de Embargo':
-        navigate('/orden-embargo');
+        navigate('/orden-embargo', { state: { numJudgment } }); 
         break;
       default:
         break;

@@ -6,6 +6,8 @@ const MenuTransactionComponent = () => {
   const location = useLocation();
   const { numJudgment } = location.state || {};
 
+  console.log("JUICIO: ", numJudgment)
+
   const options = [
     { label: 'Requerir Datos Cuenta', path: '/resume-table', title: 'Requerir Datos Cuenta' },
     { label: 'Orden Retención', path: '/resume-table', title: 'Orden Retención' },

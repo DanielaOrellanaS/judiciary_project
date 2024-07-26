@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../components.css';
-import { getJudgment, saveJudgment, saveOrders } from '../Api';
+import { getJudgmentById, updateJudgment, saveOrders } from '../Api';
 import { useLocation } from 'react-router-dom';
 import { IconButton } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
 
-const RequireDataComponent = () => {
+const EditRequireDataComponent = () => {
   const location = useLocation();
-  const { numJudgment } = location.state || {};
-  const adjudicated = "QUITO CIVIL";
-  const orderType = 'RequireData'; 
+  const { idJudgment } = location.state || {};
+  const orderType = 'RequireData';
 
   const getCurrentDate = () => {
     const date = new Date();
@@ -25,10 +24,10 @@ const RequireDataComponent = () => {
     const randomIndex = Math.floor(Math.random() * statuses.length);
     return statuses[randomIndex];
   }
-  
+
   const [formData, setFormData] = useState({
-    numJudgment: numJudgment || '0',
-    adjudicated: adjudicated || '',
+    numJudgment: '',
+    adjudicated: '',
     judge: '',
     mailOrderer: '', 
     nameOrderer: '', 
@@ -37,20 +36,46 @@ const RequireDataComponent = () => {
     lastname: '', 
     identificationType: '',
     identification: '',
-    date: getCurrentDate() || ''
+    date: getCurrentDate()
   });
 
   const [tableData, setTableData] = useState([
     { 
-      orderType: orderType || '', 
-      transactionStatus: getRandomStatus() || '',
-      numOffice: numOffice || '', 
+      orderType: orderType, 
+      transactionStatus: getRandomStatus(),
+      numOffice: numOffice, 
       nameDefendant: '',
       lastnameDefendant: '',
       identificationTypeDefendant: '', 
       identificationDefendant: '', 
     }
   ]);
+
+  useEffect(() => {
+    const fetchJudgmentData = async () => {
+      try {
+        const data = await getJudgmentById(idJudgment);
+        setFormData({
+          numJudgment: data.numJudgment || '',
+          adjudicated: data.adjudicated || '',
+          judge: data.judge || '',
+          mailOrderer: data.mailOrderer || '',
+          nameOrderer: data.nameOrderer || '',
+          positionOrderer: data.positionOrderer || '',
+          name: data.name || '',
+          lastname: data.lastname || '',
+          identificationType: data.identificationType || '',
+          identification: data.identification || '',
+          date: data.date || getCurrentDate(),
+        });
+        setTableData(data.orders || []);
+      } catch (error) {
+        console.error('Error fetching judgment data:', error);
+      }
+    };
+
+    fetchJudgmentData();
+  }, [idJudgment]);
 
   const handleFormInputChange = (event) => {
     const { name, value } = event.target;
@@ -71,60 +96,53 @@ const RequireDataComponent = () => {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await saveJudgment(formData);
+      const response = await updateJudgment(idJudgment, formData);
       if (response.ok) {
-        alert('Datos guardados correctamente.');
+        alert('Datos actualizados correctamente.');
       } else {
-        alert('Hubo un problema al guardar los datos.');
+        alert('Hubo un problema al actualizar los datos.');
       }
     } catch (error) {
-      console.error('Datos incompletos', error);
+      console.error('Error al actualizar los datos:', error);
     }
   };
 
   const handleTableSubmit = async (event) => {
     event.preventDefault();
-    const judgmentData = await getJudgment();
-  
-    const lastJudgmentId = judgmentData.reduce((maxId, judgment) => {
-      return judgment.idJudgment > maxId ? judgment.idJudgment : maxId;
-    }, 0) + 1;
-  
     try {
       for (const item of tableData) {
         const updatedItem = {
-          orderType: orderType || '',
-          transactionStatus: getRandomStatus() || '',
-          numOffice: numOffice || '',
+          orderType: item.orderType || orderType,
+          transactionStatus: item.transactionStatus || getRandomStatus(),
+          numOffice: item.numOffice || numOffice,
           nameDefendant: item.nameDefendant || '',
           lastnameDefendant: item.lastnameDefendant || '',
           identificationTypeDefendant: item.identificationTypeDefendant || '',
           identificationDefendant: item.identificationDefendant || '',
-          idJudgment: lastJudgmentId,
+          idJudgment: idJudgment,
         };
-  
+
         console.log("DATA ENVIADA DESDE SAVE ORDERS: ", JSON.stringify(updatedItem));
-  
+
         const response = await saveOrders(updatedItem);
-        const responseData = await response.json(); 
+        const responseData = await response.json();
         console.log("RESPONSE OF REQUIRE DATA: ", responseData);
         if (!response.ok) {
           throw new Error(responseData.detail || 'Failed to save orders data');
         }
       }
-  
+
       alert('Datos de la tabla guardados correctamente.');
     } catch (error) {
       console.error('Error al guardar los datos de la tabla:', error);
       alert('Error al guardar los datos de la tabla: ' + error.message);
     }
   };
-  
 
   const addNewRow = () => {
     setTableData([
       ...tableData,
-      { orderType: orderType || '', transactionStatus: getRandomStatus() || '', numOffice: numOffice || '', nameDefendant: '', lastnameDefendant: '', identificationTypeDefendant: '', identificationDefendant: '' }
+      { orderType: orderType, transactionStatus: getRandomStatus(), numOffice: numOffice, nameDefendant: '', lastnameDefendant: '', identificationTypeDefendant: '', identificationDefendant: '' }
     ]);
   };
 
@@ -234,7 +252,6 @@ const RequireDataComponent = () => {
             <option value="ruc">RUC</option>
           </select>
         </div>
-
         <div className="form-group">
           <label htmlFor="identification">Identificacion Demandante:</label>
           <input
@@ -255,21 +272,14 @@ const RequireDataComponent = () => {
             readOnly
           />
         </div>
-        <div className="form-submit" style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>  
-          <Button type="submit" variant="contained" style={{ backgroundColor: 'green', color: 'white', fontSize: '0.7rem' }}>  
-              Guardar  
-          </Button>  
+        <div className="form-submit">
+          <Button type="submit" variant="contained" color="primary">
+            Guardar
+          </Button>
         </div>
       </form>
-      <div className="table-header" style={{ display: 'flex', alignItems: 'center' }}>   
-          <IconButton  
-              color="primary"  
-              onClick={addNewRow}  
-              style={{ color: 'green', borderRadius: '50%', width: '15px', height: '15px' }}  
-          >  
-              <AddCircleIcon fontSize="large" />  
-          </IconButton>  
-          <h2 style={{ margin: 15 }}>Cuentas Ahorros-Corrientes</h2> 
+      <div className="table-header">
+        <h2>Cuentas Ahorros-Corrientes</h2>
       </div>
       <form onSubmit={handleTableSubmit}>
         <table className="transaction-table">
@@ -277,9 +287,9 @@ const RequireDataComponent = () => {
             <tr>
               <th>Nombres</th>
               <th>Apellidos</th>
-              <th>Tipo identificación</th>
+              <th>Tipo Identificación</th>
               <th>Identificación</th>
-              <th>Acción</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -288,27 +298,24 @@ const RequireDataComponent = () => {
                 <td>
                   <input
                     type="text"
-                    id="nameDefendant"
                     name="nameDefendant"
                     value={row.nameDefendant}
-                    onChange={(e) => handleTableInputChange(index, e)}
+                    onChange={(event) => handleTableInputChange(index, event)}
                   />
                 </td>
                 <td>
                   <input
                     type="text"
-                    id="lastnameDefendant"
                     name="lastnameDefendant"
                     value={row.lastnameDefendant}
-                    onChange={(e) => handleTableInputChange(index, e)}
+                    onChange={(event) => handleTableInputChange(index, event)}
                   />
                 </td>
                 <td>
                   <select
-                    id="identificationTypeDefendant"
                     name="identificationTypeDefendant"
                     value={row.identificationTypeDefendant}
-                    onChange={(e) => handleTableInputChange(index, e)}
+                    onChange={(event) => handleTableInputChange(index, event)}
                   >
                     <option value="">Seleccione...</option>
                     <option value="cedula">Cédula</option>
@@ -319,14 +326,13 @@ const RequireDataComponent = () => {
                 <td>
                   <input
                     type="text"
-                    id="identificationDefendant"
                     name="identificationDefendant"
                     value={row.identificationDefendant}
-                    onChange={(e) => handleTableInputChange(index, e)}
+                    onChange={(event) => handleTableInputChange(index, event)}
                   />
                 </td>
                 <td>
-                  <IconButton color="secondary" onClick={() => deleteRow(index)}>
+                  <IconButton onClick={() => deleteRow(index)}>
                     <DeleteIcon />
                   </IconButton>
                 </td>
@@ -334,14 +340,17 @@ const RequireDataComponent = () => {
             ))}
           </tbody>
         </table>
-        <div className="table-actions" style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>  
-            <Button type="submit" variant="contained" style={{ backgroundColor: 'green', color: 'white', fontSize: '0.7rem' }}>  
-                Guardar Datos  
-            </Button>  
+        <div className="table-actions">
+          <IconButton color="primary" onClick={addNewRow}>
+            <AddCircleIcon />
+          </IconButton>
+          <Button type="submit" variant="contained" color="primary">
+            Guardar Datos
+          </Button>
         </div>
       </form>
     </div>
   );
 };
 
-export default RequireDataComponent;
+export default EditRequireDataComponent;
