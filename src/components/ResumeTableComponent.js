@@ -6,7 +6,7 @@ import { getBankResponse, getJudgment } from '../Api';
 const ResumeTableComponent = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { title, numJudgment } = location.state || {}; 
+  const { title, numJudgment } = location.state || {};
 
   const [combinedData, setCombinedData] = useState([]);
   
@@ -63,7 +63,11 @@ const ResumeTableComponent = () => {
                   <td>{item.name}</td>
                   <td>{item.identification}</td>
                   <td>{item.accountStatus}</td>
-                  <td><button>Editar</button></td>
+                  <td>
+                    <button onClick={() => navigate('/edit-require-data', { state: { idJudgment: item.idJudgment, numJudgment: numJudgment } })}>
+                      Editar
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -95,7 +99,11 @@ const ResumeTableComponent = () => {
                   <td>{item.identification}</td>
                   <td>{item.accountType}</td>
                   <td>{item.bank}</td>
-                  <td><button>Editar</button></td>
+                  <td>
+                    <button onClick={() => navigate('/edit-require-data', { state: { idJudgment: item.idJudgment, numJudgment: numJudgment } })}>
+                      Editar
+                    </button>
+                  </td>
                   <td>{item.accountStatus}</td>
                 </tr>
               ))}

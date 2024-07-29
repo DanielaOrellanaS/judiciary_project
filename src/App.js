@@ -10,6 +10,7 @@ import RetentionOrderComponent from './components/RetentionOrderComponent';
 import ReleaseOrderComponent from './components/ReleaseOrderComponent';
 import SeizureOrderComponent from './components/SeizureOrderComponent';
 import ResumeTableComponent from './components/ResumeTableComponent';
+import EditRequireDataComponent from './components/EditRequireComponent';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -60,6 +61,10 @@ function App() {
           <Route
             path="/resume-table"
             element={isLoggedIn ? <ResumeTableComponent /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/edit-require-data"
+            element={isLoggedIn ? <EditRequireDataComponent /> : <Navigate to="/" />}
           />
         </Routes>
       </div>

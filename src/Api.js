@@ -1,5 +1,5 @@
-const apiUrl = 'https://rest-api-notification.onrender.com';
-const localUrl = 'http://127.0.0.1:8000';  
+const localUrl = 'https://rest-api-notification.onrender.com';
+const apiUrl = 'http://127.0.0.1:8000';  
 
 async function getJudgment() {
   try {
@@ -16,6 +16,25 @@ async function getJudgment() {
     return data;
   } catch (error) {
     console.error('Error fetching judgments:', error);
+    throw error;
+  }
+}
+
+async function getJudgmentById(id) {
+  try {
+    const response = await fetch(`${apiUrl}/judgment/${id}/`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to fetch judgment with ID: ${id}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(`Error fetching judgment with ID ${id}:`, error);
     throw error;
   }
 }
@@ -52,6 +71,9 @@ async function updateJudgment(id, data) {
       },
       body: JSON.stringify(data),
     });
+
+    console.log("IDENTIFICADOR: ", id)
+    console.log("DATA UPDATE: ", data)
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -105,6 +127,46 @@ async function getOrders() {
   }
 }
 
+async function getOrdersByJudgmentId(idJudgment) {
+  try {
+    const response = await fetch(`${apiUrl}/orders/by_judgment/${idJudgment}/`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to fetch orders with Judgment ID: ${idJudgment}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(`Error fetching orders with Judgment ID ${idJudgment}:`, error);
+    throw error;
+  }
+}
+
+async function getBankResponseById(id) {
+  try {
+    const response = await fetch(`${apiUrl}/bank_response/${id}/`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to fetch bank response with ID: ${id}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(`Error fetching bank response with ID ${id}:`, error);
+    throw error;
+  }
+}
+
+
+
 async function saveOrders(data) {
   try {
     const response = await fetch(`${apiUrl}/orders/`, {
@@ -114,10 +176,6 @@ async function saveOrders(data) {
       },
       body: JSON.stringify(data),
     });
-
-    console.log("DATA ENVIADA DESDE SAVE ORDERS: ", JSON.stringify(data))
-
-    console.log("RESPUESTA: ", response)
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -132,4 +190,27 @@ async function saveOrders(data) {
   }
 }
 
-export { getJudgment, saveJudgment, updateJudgment, getBankResponse, getOrders, saveOrders }
+async function saveBankOrderDetail(data) {
+  try {
+    const response = await fetch(`${apiUrl}/bank_order_details/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.detail || 'Failed to save bank order details data');
+    }
+
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    console.error('Error saving bank order details:', error);
+    throw error;
+  }
+}
+
+export { getJudgment, getJudgmentById, saveJudgment, updateJudgment, getBankResponse, getBankResponseById, getOrders, getOrdersByJudgmentId, saveOrders, saveBankOrderDetail }

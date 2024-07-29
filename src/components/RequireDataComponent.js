@@ -88,7 +88,7 @@ const RequireDataComponent = () => {
   
     const lastJudgmentId = judgmentData.reduce((maxId, judgment) => {
       return judgment.idJudgment > maxId ? judgment.idJudgment : maxId;
-    }, 0) + 1;
+    }, 0);
   
     try {
       for (const item of tableData) {

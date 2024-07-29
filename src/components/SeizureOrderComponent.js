@@ -4,9 +4,8 @@ import { useLocation } from 'react-router-dom';
 import { getBankResponse, getJudgment, getOrders } from '../Api';
 
 const SeizureOrderComponent = () => {
-  const location = useLocation();
-  const { numJudgment } = location.state || {};
   const [combinedData, setCombinedData] = useState([]);
+
   const [tableData, setTableData] = useState({
     numJudgment: '',
     bank: '',
@@ -18,6 +17,23 @@ const SeizureOrderComponent = () => {
     accountNumBenef: '',
     identificationTypeBenef: '',
     identificationBenef: '',
+  });
+
+  const [tableDataBenef, setTableDataBenef] = useState({
+    idOrder: '',
+    bankCode: '',
+    numOrder: '',
+    transactionStatusBank: '',
+    responseDate: '',
+    accountTypeBeneficiary: '',
+    accountNumBeneficiary: '',
+    amount: '',
+    identificationTypeBeneficiary: '',
+    identificationBeneficiary: '',
+    bankBeneficiary: '',
+    nameBeneficiary: '',
+    lastnameBeneficiary: '',
+    typeTxBeneficiary: '',
   });
 
   const handleInputChange = (e) => {
@@ -86,6 +102,8 @@ const SeizureOrderComponent = () => {
   }
 
   const formData = combinedData[0];
+
+  console.log("QUE DATOS TENGO: ", formData)
 
   return (
     <div className="transaction-container">
@@ -178,34 +196,45 @@ const SeizureOrderComponent = () => {
         <thead>
           <tr>
             <th>Nombres</th>
+            <th>Apellido</th>
             <th>Tipo identificación</th>
             <th>Identificacion</th>
             <th>Numero Oficio</th>
-            <th>Banco</th>
-            <th>Monto</th>
             <th>Tipo de cuenta</th>
             <th>CTA</th>
-            <th>Tipo Cuenta Benef</th>
+            <th>Tipo de cuenta Benef</th>
             <th>Num Cuenta Benef</th>
+            <th>Monto</th>
             <th>CI Tipo Benef</th>
             <th>CI Benef</th>
             <th>Banco Benef</th>
-            <th>Nombres Benef</th>
-            <th>Estado TX</th>
-            <th>Fecha Respuesta</th>
+            <th>Nombre Benef</th>
+            <th>Apellido Benef</th>
+            <th>Tipo TX</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>{formData.orderData.nameDefendant}</td>
+            <td>{formData.orderData.lastnameDefendant}</td> {/* Nueva celda añadida */}
             <td>{formData.orderData.identificationTypeDefendant}</td>
             <td>{formData.orderData.identificationDefendant}</td>
             <td>{formData.numJudgment}</td>
+            <td>{formData.accountType}</td>
+            <td>{formData.accountNum}</td>
             <td>
               <input
                 type="text"
-                name="bank"
-                value={formData.bank}
+                name="accountTypeBeneficiary"
+                value={tableDataBenef.accountTypeBeneficiary}
+                onChange={handleInputChange}
+              />
+            </td>
+            <td>
+              <input
+                type="text"
+                name="accountNumBeneficiary"
+                value={tableDataBenef.accountNumBeneficiary}
                 onChange={handleInputChange}
               />
             </td>
@@ -213,47 +242,15 @@ const SeizureOrderComponent = () => {
               <input
                 type="text"
                 name="amount"
-                value={tableData.amount}
-                onChange={handleInputChange}
-              />
-            </td>
-            <td>
-              <input
-                type="text"
-                name="accountType"
-                value={formData.accountType}
-                onChange={handleInputChange}
-              />
-            </td>
-            <td>
-              <input
-                type="text"
-                name="accountNum"
-                value={formData.accountNum}
-                onChange={handleInputChange}
-              />
-            </td>
-            <td>
-              <input
-                type="text"
-                name="accountTypeBenef"
-                value={formData.accountTypeBenef}
-                onChange={handleInputChange}
-              />
-            </td>
-            <td>
-              <input
-                type="text"
-                name="accountNumBenef"
-                value={formData.accountNumBenef}
+                value={tableDataBenef.amount}
                 onChange={handleInputChange}
               />
             </td>
             <td>
               <select
-                id="identificationTypeBenef"
-                name="identificationTypeBenef"
-                value={formData.identificationTypeBenef}
+                id="identificationTypeBeneficiary"
+                name="identificationTypeBeneficiary"
+                value={tableDataBenef.identificationTypeBeneficiary}
                 onChange={handleInputChange}
               >
                 <option value="">Seleccione...</option>
@@ -265,29 +262,43 @@ const SeizureOrderComponent = () => {
             <td>
               <input
                 type="text"
-                name="identificationBenef"
-                value={formData.identificationBenef}
+                name="identificationBeneficiary"
+                value={tableDataBenef.identificationBeneficiary}
                 onChange={handleInputChange}
               />
             </td>
             <td>
               <input
                 type="text"
-                name="bank"
-                value={formData.bank}
+                name="bankBeneficiary"
+                value={tableDataBenef.bankBeneficiary}
                 onChange={handleInputChange}
               />
             </td>
             <td>
               <input
                 type="text"
-                name="name"
-                value={formData.name}
+                name="nameBeneficiary"
+                value={tableDataBenef.nameBeneficiary}
                 onChange={handleInputChange}
               />
             </td>
-            <td>{tableData.accountStatus}</td>
-            <td>{tableData.responseDate ? new Date(tableData.responseDate).toLocaleDateString() : ''}</td>
+            <td>
+              <input
+                type="text"
+                name="lastnameBeneficiary"
+                value={tableDataBenef.lastnameBeneficiary}
+                onChange={handleInputChange}
+              />
+            </td>
+            <td>
+              <input
+                type="text"
+                name="typeTxBeneficiary"
+                value={tableDataBenef.typeTxBeneficiary}
+                onChange={handleInputChange}
+              />
+            </td>
           </tr>
         </tbody>
       </table>

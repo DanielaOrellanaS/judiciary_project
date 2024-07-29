@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../components.css';
-import { getJudgmentById, updateJudgment, saveOrders } from '../Api';
+import { getJudgmentById, updateJudgment, saveOrders, getOrdersByJudgmentId, getBankResponse, getBankResponseById } from '../Api';
 import { useLocation } from 'react-router-dom';
 import { IconButton } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -9,8 +9,9 @@ import Button from '@mui/material/Button';
 
 const EditRequireDataComponent = () => {
   const location = useLocation();
-  const { idJudgment } = location.state || {};
+  const { idJudgment, numJudgment } = location.state || {};
   const orderType = 'RequireData';
+  const adjudicated = "QUITO CIVIL";
 
   const getCurrentDate = () => {
     const date = new Date();
@@ -25,18 +26,22 @@ const EditRequireDataComponent = () => {
     return statuses[randomIndex];
   }
 
+  function getRandomId(ids) {
+    const randomIndex = Math.floor(Math.random() * ids.length);
+    return ids[randomIndex];
+  }    
+
   const [formData, setFormData] = useState({
-    numJudgment: '',
-    adjudicated: '',
+    numJudgment: numJudgment || '0',
+    adjudicated: adjudicated || '',
     judge: '',
     mailOrderer: '', 
-    nameOrderer: '', 
     positionOrderer: '',
     name: '',
     lastname: '', 
     identificationType: '',
     identification: '',
-    date: getCurrentDate()
+    date: getCurrentDate() || ''
   });
 
   const [tableData, setTableData] = useState([
@@ -48,6 +53,11 @@ const EditRequireDataComponent = () => {
       lastnameDefendant: '',
       identificationTypeDefendant: '', 
       identificationDefendant: '', 
+      accountType: '', 
+      bank: '', 
+      accountNum: '',
+      accountStatus: '', 
+      responseDate: ''
     }
   ]);
 
@@ -55,12 +65,11 @@ const EditRequireDataComponent = () => {
     const fetchJudgmentData = async () => {
       try {
         const data = await getJudgmentById(idJudgment);
+        const tableData = await getOrdersByJudgmentId(idJudgment); 
+        const randomResponse = await getBankResponse().then(allResponses => getBankResponseById(getRandomId(allResponses.map(response => response.id))));
         setFormData({
-          numJudgment: data.numJudgment || '',
-          adjudicated: data.adjudicated || '',
           judge: data.judge || '',
           mailOrderer: data.mailOrderer || '',
-          nameOrderer: data.nameOrderer || '',
           positionOrderer: data.positionOrderer || '',
           name: data.name || '',
           lastname: data.lastname || '',
@@ -68,7 +77,23 @@ const EditRequireDataComponent = () => {
           identification: data.identification || '',
           date: data.date || getCurrentDate(),
         });
-        setTableData(data.orders || []);
+
+        setTableData(tableData.map(item => ({
+            idOrder: item.idOrder || '',
+            identificationDefendant: item.identificationDefendant || '',
+            identificationTypeDefendant: item.identificationTypeDefendant || '',
+            lastnameDefendant: item.lastnameDefendant || '',
+            nameDefendant: item.nameDefendant || '',
+            numOffice: item.numOffice || '',
+            orderType: item.orderType || '',
+            transactionStatus: item.transactionStatus || '',
+            accountType: randomResponse.accountType || '',
+            accountNum: randomResponse.accountNum || '',
+            accountStatus: randomResponse.accountStatus || '',
+            responseDate: randomResponse.responseDate || '',
+            bank: randomResponse.bank || '',
+          })));
+          
       } catch (error) {
         console.error('Error fetching judgment data:', error);
       }
@@ -272,14 +297,21 @@ const EditRequireDataComponent = () => {
             readOnly
           />
         </div>
-        <div className="form-submit">
-          <Button type="submit" variant="contained" color="primary">
-            Guardar
-          </Button>
+        <div className="form-submit" style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>  
+          <Button type="submit" variant="contained" style={{ backgroundColor: 'green', color: 'white', fontSize: '0.7rem' }}>  
+              Actualizar
+          </Button>  
         </div>
       </form>
-      <div className="table-header">
-        <h2>Cuentas Ahorros-Corrientes</h2>
+      <div className="table-header" style={{ display: 'flex', alignItems: 'center' }}>   
+          <IconButton  
+              color="primary"  
+              onClick={addNewRow}  
+              style={{ color: 'green', borderRadius: '50%', width: '15px', height: '15px' }}  
+          >  
+              <AddCircleIcon fontSize="large" />  
+          </IconButton>  
+          <h2 style={{ margin: 15 }}>Cuentas Ahorros-Corrientes</h2> 
       </div>
       <form onSubmit={handleTableSubmit}>
         <table className="transaction-table">
@@ -289,17 +321,23 @@ const EditRequireDataComponent = () => {
               <th>Apellidos</th>
               <th>Tipo Identificación</th>
               <th>Identificación</th>
+              <th>Tipo Cuenta</th>
+              <th>Num Cuenta</th>
+              <th>Banco</th>
+              <th>Estado Cuenta</th>
+              <th>Fecha Respuesta</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {tableData.map((row, index) => (
+          {tableData.map((row, index) => {
+            return (
               <tr key={index}>
                 <td>
                   <input
                     type="text"
                     name="nameDefendant"
-                    value={row.nameDefendant}
+                    value={row.nameDefendant || ''} 
                     onChange={(event) => handleTableInputChange(index, event)}
                   />
                 </td>
@@ -307,14 +345,14 @@ const EditRequireDataComponent = () => {
                   <input
                     type="text"
                     name="lastnameDefendant"
-                    value={row.lastnameDefendant}
+                    value={row.lastnameDefendant || ''}
                     onChange={(event) => handleTableInputChange(index, event)}
                   />
                 </td>
                 <td>
                   <select
                     name="identificationTypeDefendant"
-                    value={row.identificationTypeDefendant}
+                    value={row.identificationTypeDefendant || ''}
                     onChange={(event) => handleTableInputChange(index, event)}
                   >
                     <option value="">Seleccione...</option>
@@ -327,8 +365,53 @@ const EditRequireDataComponent = () => {
                   <input
                     type="text"
                     name="identificationDefendant"
-                    value={row.identificationDefendant}
+                    value={row.identificationDefendant || ''}
                     onChange={(event) => handleTableInputChange(index, event)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    name="accountType"
+                    value={row.accountType || ''}
+                    onChange={(event) => handleTableInputChange(index, event)}
+                    readOnly
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    name="accountNum"
+                    value={row.accountNum || ''}
+                    onChange={(event)=> handleTableInputChange(index, event)}
+                    readOnly
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    name="bank"
+                    value={row.bank || ''}
+                    onChange={(event) => handleTableInputChange(index, event)}
+                    readOnly
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    name="accountStatus"
+                    value={row.accountStatus || ''}
+                    onChange={(event) => handleTableInputChange(index, event)}
+                    readOnly
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    name="responseDate"
+                    value={row.responseDate || ''}
+                    onChange={(event) => handleTableInputChange(index, event)}
+                    readOnly
                   />
                 </td>
                 <td>
@@ -337,16 +420,17 @@ const EditRequireDataComponent = () => {
                   </IconButton>
                 </td>
               </tr>
-            ))}
+            );
+          })}
+
           </tbody>
         </table>
         <div className="table-actions">
-          <IconButton color="primary" onClick={addNewRow}>
-            <AddCircleIcon />
-          </IconButton>
-          <Button type="submit" variant="contained" color="primary">
-            Guardar Datos
-          </Button>
+          <div className="table-actions" style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>  
+            <Button type="submit" variant="contained" style={{ backgroundColor: 'green', color: 'white', fontSize: '0.7rem' }}>  
+                Actualizar Datos  
+            </Button>  
+        </div>
         </div>
       </form>
     </div>
