@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import '../components.css';
-import { getJudgmentById, updateJudgment, saveOrders, getOrdersByJudgmentId, getBankResponse, getBankResponseById } from '../Api';
+import '../../components.css';
+import { getJudgmentById, updateJudgment, getOrdersReleaseByJudgmentIdAndOrderType, getBankResponse, getBankResponseById, getJudgment, updateOrdersRelease } from '../../Api';
 import { useLocation } from 'react-router-dom';
 import { IconButton } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
 
-const EditRequireDataComponent = () => {
+const EditReleaseOrderComponent = () => {
   const location = useLocation();
   const { idJudgment, numJudgment } = location.state || {};
-  const orderType = 'RequireData';
-  const adjudicated = "QUITO CIVIL";
+  const orderType = 'ReleaseOrder';
+  const navigate = useNavigate();
 
   const getCurrentDate = () => {
     const date = new Date();
@@ -32,8 +33,8 @@ const EditRequireDataComponent = () => {
   }    
 
   const [formData, setFormData] = useState({
-    numJudgment: numJudgment || '0',
-    adjudicated: adjudicated || '',
+    numJudgment: numJudgment || '',
+    adjudicated: '',
     judge: '',
     mailOrderer: '', 
     positionOrderer: '',
@@ -46,9 +47,9 @@ const EditRequireDataComponent = () => {
 
   const [tableData, setTableData] = useState([
     { 
-      orderType: orderType, 
+      orderType: '', 
       transactionStatus: getRandomStatus(),
-      numOffice: numOffice, 
+      numOffice: '', 
       nameDefendant: '',
       lastnameDefendant: '',
       identificationTypeDefendant: '', 
@@ -65,10 +66,13 @@ const EditRequireDataComponent = () => {
     const fetchJudgmentData = async () => {
       try {
         const data = await getJudgmentById(idJudgment);
-        const tableData = await getOrdersByJudgmentId(idJudgment); 
+        const tableData = await getOrdersReleaseByJudgmentIdAndOrderType(idJudgment, orderType); 
+        console.log("DATOS FILTRADOS: ", tableData)
         const randomResponse = await getBankResponse().then(allResponses => getBankResponseById(getRandomId(allResponses.map(response => response.id))));
         setFormData({
           judge: data.judge || '',
+          adjudicated: data.adjudicated || '',
+          numJudgment: numJudgment || '',
           mailOrderer: data.mailOrderer || '',
           positionOrderer: data.positionOrderer || '',
           name: data.name || '',
@@ -100,7 +104,7 @@ const EditRequireDataComponent = () => {
     };
 
     fetchJudgmentData();
-  }, [idJudgment]);
+  }, [idJudgment, numJudgment]);
 
   const handleFormInputChange = (event) => {
     const { name, value } = event.target;
@@ -118,49 +122,85 @@ const EditRequireDataComponent = () => {
     setTableData(updatedTableData);
   };
 
-  const handleFormSubmit = async (event) => {
-    event.preventDefault();
+  const handleFormSubmit = async () => {
     try {
       const response = await updateJudgment(idJudgment, formData);
       if (response.ok) {
-        alert('Datos actualizados correctamente.');
-      } else {
-        alert('Hubo un problema al actualizar los datos.');
+        alert('Datos guardados correctamente.');
       }
+      return true;
     } catch (error) {
       console.error('Error al actualizar los datos:', error);
+      return false;
     }
   };
 
-  const handleTableSubmit = async (event) => {
-    event.preventDefault();
+  const handleTableSubmit = async () => {
+    const judgmentData = await getJudgment();
+  
+    const lastJudgmentId = judgmentData.reduce((maxId, judgment) => {
+      return judgment.idJudgment > maxId ? judgment.idJudgment : maxId;
+    }, 0);
+  
     try {
       for (const item of tableData) {
         const updatedItem = {
-          orderType: item.orderType || orderType,
-          transactionStatus: item.transactionStatus || getRandomStatus(),
-          numOffice: item.numOffice || numOffice,
+          orderType: orderType || '',
+          transactionStatus: getRandomStatus() || '',
+          numOffice: numOffice || '',
           nameDefendant: item.nameDefendant || '',
           lastnameDefendant: item.lastnameDefendant || '',
           identificationTypeDefendant: item.identificationTypeDefendant || '',
           identificationDefendant: item.identificationDefendant || '',
-          idJudgment: idJudgment,
+          idJudgment: lastJudgmentId,
         };
-
+  
         console.log("DATA ENVIADA DESDE SAVE ORDERS: ", JSON.stringify(updatedItem));
-
-        const response = await saveOrders(updatedItem);
-        const responseData = await response.json();
-        console.log("RESPONSE OF REQUIRE DATA: ", responseData);
+  
+        const response = await updateOrdersRelease(item.idOrder, updatedItem);
+  
         if (!response.ok) {
-          throw new Error(responseData.detail || 'Failed to save orders data');
+          const errorData = await response.json();
+          console.error("RESPONSE ERROR DATA: ", errorData);
+          throw new Error(errorData.detail || 'Failed to save orders data');
         }
       }
-
+  
       alert('Datos de la tabla guardados correctamente.');
+      return true;
     } catch (error) {
       console.error('Error al guardar los datos de la tabla:', error);
       alert('Error al guardar los datos de la tabla: ' + error.message);
+      return false;
+    }
+  };   
+
+  const handleSubmit = async (event) => {
+    if (event) {
+      event.preventDefault();
+    }
+
+    try {
+      const isFormSaved = await handleFormSubmit();
+
+      if (isFormSaved) {
+        const isTableSaved = await handleTableSubmit();
+
+        if (isTableSaved) {
+          alert('Todos los datos se han guardado correctamente.');
+          navigate('/transaccion');
+        } else {
+          alert('Error al guardar los datos de la tabla.');
+          navigate('/transaccion');
+        }
+      } else {
+        alert('Error al guardar los datos del formulario.');
+        navigate('/transaccion');
+      }
+    } catch (error) {
+      console.error('Error en handleSubmit:', error);
+      alert('Ocurrió un error inesperado.');
+      navigate('/transaccion');
     }
   };
 
@@ -178,7 +218,7 @@ const EditRequireDataComponent = () => {
 
   return (
     <div className="transaction-container">
-      <form className="transaction-form" onSubmit={handleFormSubmit}>
+      <form className="transaction-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="adjudicated">Juzgado:</label>
           <input
@@ -297,12 +337,6 @@ const EditRequireDataComponent = () => {
             readOnly
           />
         </div>
-        <div className="form-submit" style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>  
-          <Button type="submit" variant="contained" style={{ backgroundColor: 'green', color: 'white', fontSize: '0.7rem' }}>  
-              Actualizar
-          </Button>  
-        </div>
-      </form>
       <div className="table-header" style={{ display: 'flex', alignItems: 'center' }}>   
           <IconButton  
               color="primary"  
@@ -313,7 +347,6 @@ const EditRequireDataComponent = () => {
           </IconButton>  
           <h2 style={{ margin: 15 }}>Cuentas Ahorros-Corrientes</h2> 
       </div>
-      <form onSubmit={handleTableSubmit}>
         <table className="transaction-table">
           <thead>
             <tr>
@@ -321,10 +354,11 @@ const EditRequireDataComponent = () => {
               <th>Apellidos</th>
               <th>Tipo Identificación</th>
               <th>Identificación</th>
+              <th>Num Oficio</th>
+              <th>Banco</th>
               <th>Tipo Cuenta</th>
               <th>Num Cuenta</th>
-              <th>Banco</th>
-              <th>Estado Cuenta</th>
+              <th>Estado Transaccion</th>
               <th>Fecha Respuesta</th>
               <th>Acciones</th>
             </tr>
@@ -372,6 +406,23 @@ const EditRequireDataComponent = () => {
                 <td>
                   <input
                     type="text"
+                    name="numOffice"
+                    value={numOffice || ''}
+                    onChange={(event) => handleTableInputChange(index, event)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    name="bank"
+                    value={row.bank || ''}
+                    onChange={(event) => handleTableInputChange(index, event)}
+                    readOnly
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
                     name="accountType"
                     value={row.accountType || ''}
                     onChange={(event) => handleTableInputChange(index, event)}
@@ -384,15 +435,6 @@ const EditRequireDataComponent = () => {
                     name="accountNum"
                     value={row.accountNum || ''}
                     onChange={(event)=> handleTableInputChange(index, event)}
-                    readOnly
-                  />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    name="bank"
-                    value={row.bank || ''}
-                    onChange={(event) => handleTableInputChange(index, event)}
                     readOnly
                   />
                 </td>
@@ -437,4 +479,4 @@ const EditRequireDataComponent = () => {
   );
 };
 
-export default EditRequireDataComponent;
+export default EditReleaseOrderComponent;

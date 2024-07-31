@@ -16,7 +16,7 @@ const CustomAppBar = styled(AppBar)({
 
 const Title = styled(Typography)({
   flexGrow: 1,
-  textAlign: 'center',
+  textAlign: 'center', 
 });
 
 const HeaderComponent = () => {

@@ -9,10 +9,10 @@ const MenuTransactionComponent = () => {
   console.log("JUICIO: ", numJudgment)
 
   const options = [
-    { label: 'Requerir Datos Cuenta', path: '/resume-table', title: 'Requerir Datos Cuenta' },
-    { label: 'Orden Retención', path: '/resume-table', title: 'Orden Retención' },
-    { label: 'Orden de Liberación', path: '/resume-table', title: 'Orden de Liberación' },
-    { label: 'Orden de Embargo', path: '/resume-table', title: 'Orden de Embargo' },
+    { label: 'Requerir Datos Cuenta', path: '/table-require-data', title: 'Requerir Datos Cuenta' },
+    { label: 'Orden Retención', path: '/table-retention-order', title: 'Orden Retención' },
+    { label: 'Orden de Liberación', path: '/table-release-order', title: 'Orden de Liberación' },
+    { label: 'Orden de Embargo', path: '/table-seizure-order', title: 'Orden de Embargo' },
   ];
 
   return (

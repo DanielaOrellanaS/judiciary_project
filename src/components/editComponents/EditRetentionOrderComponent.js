@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import '../components.css';
-import { getJudgment, saveJudgment, saveOrdersRelease } from '../Api';
+import React, { useState, useEffect } from 'react';
+import '../../components.css';
+import { getJudgmentById, updateJudgment, getOrdersRetentionByJudgmentIdAndOrderType, getBankResponse, getBankResponseById, getJudgment, updateOrdersRetention } from '../../Api';
 import { useLocation } from 'react-router-dom';
 import { IconButton } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -8,11 +8,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 
-const ReleaseOrderComponent = () => {
+const EditRetentionOrderComponent = () => {
   const location = useLocation();
-  const { numJudgment } = location.state || {};
-  const adjudicated = "QUITO CIVIL";
-  const orderType = 'ReleaseOrder'; 
+  const { idJudgment, numJudgment } = location.state || {};
+  const orderType = 'RetentionOrder';
   const navigate = useNavigate();
 
   const getCurrentDate = () => {
@@ -27,19 +26,17 @@ const ReleaseOrderComponent = () => {
     const randomIndex = Math.floor(Math.random() * statuses.length);
     return statuses[randomIndex];
   }
-  
-  const [retention, setRetention] = useState(''); 
 
-  const handleRetentionChange = (e) => {
-    setRetention(e.target.value);
-  };
+  function getRandomId(ids) {
+    const randomIndex = Math.floor(Math.random() * ids.length);
+    return ids[randomIndex];
+  }    
 
   const [formData, setFormData] = useState({
-    numJudgment: numJudgment || '0',
-    adjudicated: adjudicated || '',
+    numJudgment: numJudgment || '',
+    adjudicated: '',
     judge: '',
     mailOrderer: '', 
-    nameOrderer: '', 
     positionOrderer: '',
     name: '',
     lastname: '', 
@@ -50,19 +47,64 @@ const ReleaseOrderComponent = () => {
 
   const [tableData, setTableData] = useState([
     { 
-      orderType: orderType || '', 
-      transactionStatus: getRandomStatus() || '',
-      numOffice: numOffice || '', 
+      orderType: '', 
+      transactionStatus: getRandomStatus(),
+      numOffice: '', 
       nameDefendant: '',
       lastnameDefendant: '',
       identificationTypeDefendant: '', 
       identificationDefendant: '', 
-      amount: '', 
-      bankDefendant: '', 
-      accountTypeDefendant: '', 
-      accountNumDefendant: ''
+      accountType: '', 
+      bank: '', 
+      accountNum: '',
+      accountStatus: '', 
+      responseDate: ''
     }
   ]);
+
+  useEffect(() => {
+    const fetchJudgmentData = async () => {
+      try {
+        const data = await getJudgmentById(idJudgment);
+        const tableData = await getOrdersRetentionByJudgmentIdAndOrderType(idJudgment, orderType); 
+        console.log("DATOS FILTRADOS: ", tableData)
+        const randomResponse = await getBankResponse().then(allResponses => getBankResponseById(getRandomId(allResponses.map(response => response.id))));
+        setFormData({
+          judge: data.judge || '',
+          adjudicated: data.adjudicated || '',
+          numJudgment: numJudgment || '',
+          mailOrderer: data.mailOrderer || '',
+          positionOrderer: data.positionOrderer || '',
+          name: data.name || '',
+          lastname: data.lastname || '',
+          identificationType: data.identificationType || '',
+          identification: data.identification || '',
+          date: data.date || getCurrentDate(),
+        });
+
+        setTableData(tableData.map(item => ({
+            idOrder: item.idOrder || '',
+            identificationDefendant: item.identificationDefendant || '',
+            identificationTypeDefendant: item.identificationTypeDefendant || '',
+            lastnameDefendant: item.lastnameDefendant || '',
+            nameDefendant: item.nameDefendant || '',
+            numOffice: item.numOffice || '',
+            orderType: item.orderType || '',
+            transactionStatus: item.transactionStatus || '',
+            accountType: randomResponse.accountType || '',
+            accountNum: randomResponse.accountNum || '',
+            accountStatus: randomResponse.accountStatus || '',
+            responseDate: randomResponse.responseDate || '',
+            bank: randomResponse.bank || '',
+          })));
+          
+      } catch (error) {
+        console.error('Error fetching judgment data:', error);
+      }
+    };
+
+    fetchJudgmentData();
+  }, [idJudgment, numJudgment]);
 
   const handleFormInputChange = (event) => {
     const { name, value } = event.target;
@@ -82,13 +124,13 @@ const ReleaseOrderComponent = () => {
 
   const handleFormSubmit = async () => {
     try {
-      const response = await saveJudgment(formData);
+      const response = await updateJudgment(idJudgment, formData);
       if (response.ok) {
         alert('Datos guardados correctamente.');
       }
       return true;
     } catch (error) {
-      console.error('Datos incompletos', error);
+      console.error('Error al actualizar los datos:', error);
       return false;
     }
   };
@@ -111,19 +153,13 @@ const ReleaseOrderComponent = () => {
           identificationTypeDefendant: item.identificationTypeDefendant || '',
           identificationDefendant: item.identificationDefendant || '',
           idJudgment: lastJudgmentId,
-          amount: parseFloat(item.amount) || 0,
-          bankDefendant: item.bankDefendant || '',
-          accountTypeDefendant: item.accountTypeDefendant || '',
-          accountNumDefendant: parseFloat(item.accountNumDefendant) || 0 
         };
   
         console.log("DATA ENVIADA DESDE SAVE ORDERS: ", JSON.stringify(updatedItem));
-        
-        const response = await saveOrdersRelease(updatedItem);
   
-        if (response && response.ok) {
-          console.log("Order saved successfully:", response);
-        } else {
+        const response = await updateOrdersRetention(item.idOrder, updatedItem);
+  
+        if (!response.ok) {
           const errorData = await response.json();
           console.error("RESPONSE ERROR DATA: ", errorData);
           throw new Error(errorData.detail || 'Failed to save orders data');
@@ -137,40 +173,41 @@ const ReleaseOrderComponent = () => {
       alert('Error al guardar los datos de la tabla: ' + error.message);
       return false;
     }
-  };
+  };   
 
   const handleSubmit = async (event) => {
     if (event) {
-      event.preventDefault(); 
+      event.preventDefault();
     }
-  
+
     try {
       const isFormSaved = await handleFormSubmit();
-      
+
       if (isFormSaved) {
         const isTableSaved = await handleTableSubmit();
-        
+
         if (isTableSaved) {
           alert('Todos los datos se han guardado correctamente.');
-          navigate('/transaccion', { state: { numJudgment } });
+          navigate('/transaccion');
         } else {
           alert('Error al guardar los datos de la tabla.');
-          navigate('/transaccion', { state: { numJudgment } });
+          navigate('/transaccion');
         }
       } else {
         alert('Error al guardar los datos del formulario.');
-        navigate('/transaccion', { state: { numJudgment } });
+        navigate('/transaccion');
       }
     } catch (error) {
       console.error('Error en handleSubmit:', error);
       alert('Ocurrió un error inesperado.');
+      navigate('/transaccion');
     }
   };
-  
+
   const addNewRow = () => {
     setTableData([
       ...tableData,
-      { orderType: orderType || '', transactionStatus: getRandomStatus() || '', numOffice: numOffice || '', nameDefendant: '', lastnameDefendant: '', identificationTypeDefendant: '', identificationDefendant: '' }
+      { orderType: orderType, transactionStatus: getRandomStatus(), numOffice: numOffice, nameDefendant: '', lastnameDefendant: '', identificationTypeDefendant: '', identificationDefendant: '' }
     ]);
   };
 
@@ -291,79 +328,65 @@ const ReleaseOrderComponent = () => {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="retention">Auto de liberacion:</label>
+          <label htmlFor="fecha">Fecha:</label>
           <input
-            type="text"
-            id="retention"
-            name="retention"
-            value={retention}
-            onChange={handleRetentionChange} 
+            type="date"
+            id="fecha"
+            name="fecha"
+            value={formData.date}
+            readOnly
           />
         </div>
-        <div className="form-container" style={{ display: 'flex', flexDirection: 'column' }}>
-          <div className="form-group" style={{ marginBottom: '20px' }}>
-            <label htmlFor="fecha">Fecha:</label>
-            <input
-              type="date"
-              id="fecha"
-              name="fecha"
-              value={formData.date}
-              readOnly
-            />
-          </div>
-          <div className="table-header" style={{ display: 'flex', alignItems: 'center', marginTop: '20px' }}>
-            <IconButton  
+      <div className="table-header" style={{ display: 'flex', alignItems: 'center' }}>   
+          <IconButton  
               color="primary"  
               onClick={addNewRow}  
               style={{ color: 'green', borderRadius: '50%', width: '15px', height: '15px' }}  
-            >  
+          >  
               <AddCircleIcon fontSize="large" />  
-            </IconButton>  
-            <h2 style={{ margin: 15 }}>Cuentas Ahorros-Corrientes</h2>
-          </div>
-        </div>
+          </IconButton>  
+          <h2 style={{ margin: 15 }}>Cuentas Ahorros-Corrientes</h2> 
+      </div>
         <table className="transaction-table">
           <thead>
             <tr>
               <th>Nombres</th>
               <th>Apellidos</th>
-              <th>Tipo identificación</th>
+              <th>Tipo Identificación</th>
               <th>Identificación</th>
-              <th>Num Oficio</th>
-              <th>Monto</th>
-              <th>Banco</th>
               <th>Tipo Cuenta</th>
               <th>Num Cuenta</th>
-              <th>Acción</th>
+              <th>Banco</th>
+              <th>Estado Transaccion</th>
+              <th>Fecha Respuesta</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {tableData.map((row, index) => (
+          {tableData.map((row, index) => {
+            return (
               <tr key={index}>
                 <td>
                   <input
                     type="text"
-                    id="nameDefendant"
                     name="nameDefendant"
-                    value={row.nameDefendant}
-                    onChange={(e) => handleTableInputChange(index, e)}
+                    value={row.nameDefendant || ''} 
+                    onChange={(event) => handleTableInputChange(index, event)}
                   />
                 </td>
                 <td>
                   <input
                     type="text"
-                    id="lastnameDefendant"
                     name="lastnameDefendant"
-                    value={row.lastnameDefendant}
-                    onChange={(e) => handleTableInputChange(index, e)}
+                    value={row.lastnameDefendant || ''}
+                    onChange={(event) => handleTableInputChange(index, event)}
                   />
                 </td>
                 <td>
                   <select
-                    id="identificationTypeDefendant"
                     name="identificationTypeDefendant"
-                    value={row.identificationTypeDefendant}
-                    onChange={(e) => handleTableInputChange(index, e)}
+                    value={row.identificationTypeDefendant || ''}
+                    onChange={(event) => handleTableInputChange(index, event)}
                   >
                     <option value="">Seleccione...</option>
                     <option value="cedula">Cédula</option>
@@ -374,74 +397,77 @@ const ReleaseOrderComponent = () => {
                 <td>
                   <input
                     type="text"
-                    id="identificationDefendant"
                     name="identificationDefendant"
-                    value={row.identificationDefendant}
-                    onChange={(e) => handleTableInputChange(index, e)}
+                    value={row.identificationDefendant || ''}
+                    onChange={(event) => handleTableInputChange(index, event)}
                   />
                 </td>
                 <td>
                   <input
                     type="text"
-                    id="numOffice"
-                    name="numOffice"
-                    value={row.numOffice}
-                    onChange={(e) => handleTableInputChange(index, e)}
+                    name="accountType"
+                    value={row.accountType || ''}
+                    onChange={(event) => handleTableInputChange(index, event)}
+                    readOnly
                   />
                 </td>
                 <td>
                   <input
                     type="text"
-                    id="amount"
-                    name="amount"
-                    value={row.amount}
-                    onChange={(e) => handleTableInputChange(index, e)}
+                    name="accountNum"
+                    value={row.accountNum || ''}
+                    onChange={(event)=> handleTableInputChange(index, event)}
+                    readOnly
                   />
                 </td>
                 <td>
                   <input
                     type="text"
-                    id="bankDefendant"
-                    name="bankDefendant"
-                    value={row.bankDefendant}
-                    onChange={(e) => handleTableInputChange(index, e)}
+                    name="bank"
+                    value={row.bank || ''}
+                    onChange={(event) => handleTableInputChange(index, event)}
+                    readOnly
                   />
                 </td>
                 <td>
                   <input
                     type="text"
-                    id="accountTypeDefendant"
-                    name="accountTypeDefendant"
-                    value={row.accountTypeDefendant}
-                    onChange={(e) => handleTableInputChange(index, e)}
+                    name="accountStatus"
+                    value={row.accountStatus || ''}
+                    onChange={(event) => handleTableInputChange(index, event)}
+                    readOnly
                   />
                 </td>
                 <td>
                   <input
                     type="text"
-                    id="accountNumDefendant"
-                    name="accountNumDefendant"
-                    value={row.accountNumDefendant}
-                    onChange={(e) => handleTableInputChange(index, e)}
+                    name="responseDate"
+                    value={row.responseDate || ''}
+                    onChange={(event) => handleTableInputChange(index, event)}
+                    readOnly
                   />
                 </td>
                 <td>
-                  <IconButton color="secondary" onClick={() => deleteRow(index)}>
+                  <IconButton onClick={() => deleteRow(index)}>
                     <DeleteIcon />
                   </IconButton>
                 </td>
               </tr>
-            ))}
+            );
+          })}
+
           </tbody>
         </table>
-        <div className="table-actions" style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>  
+        <div className="table-actions">
+          <div className="table-actions" style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>  
             <Button type="submit" variant="contained" style={{ backgroundColor: 'green', color: 'white', fontSize: '0.7rem' }}>  
-                Guardar Datos  
+                Actualizar Datos  
             </Button>  
+        </div>
         </div>
       </form>
     </div>
   );
 };
 
-export default ReleaseOrderComponent;
+export default EditRetentionOrderComponent;

@@ -6,12 +6,14 @@ import { IconButton } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
 
 const RequireDataComponent = () => {
   const location = useLocation();
   const { numJudgment } = location.state || {};
   const adjudicated = "QUITO CIVIL";
   const orderType = 'RequireData'; 
+  const navigate = useNavigate();
 
   const getCurrentDate = () => {
     const date = new Date();
@@ -68,22 +70,20 @@ const RequireDataComponent = () => {
     setTableData(updatedTableData);
   };
 
-  const handleFormSubmit = async (event) => {
-    event.preventDefault();
+  const handleFormSubmit = async () => {
     try {
       const response = await saveJudgment(formData);
       if (response.ok) {
         alert('Datos guardados correctamente.');
-      } else {
-        alert('Hubo un problema al guardar los datos.');
       }
+      return true;
     } catch (error) {
       console.error('Datos incompletos', error);
+      return false;
     }
   };
 
-  const handleTableSubmit = async (event) => {
-    event.preventDefault();
+  const handleTableSubmit = async () => {
     const judgmentData = await getJudgment();
   
     const lastJudgmentId = judgmentData.reduce((maxId, judgment) => {
@@ -106,21 +106,54 @@ const RequireDataComponent = () => {
         console.log("DATA ENVIADA DESDE SAVE ORDERS: ", JSON.stringify(updatedItem));
   
         const response = await saveOrders(updatedItem);
-        const responseData = await response.json(); 
-        console.log("RESPONSE OF REQUIRE DATA: ", responseData);
-        if (!response.ok) {
-          throw new Error(responseData.detail || 'Failed to save orders data');
+  
+        if (response && response.ok) {
+          console.log("Order saved successfully:", response);
+        } else {
+          const errorData = await response.json();
+          console.error("RESPONSE ERROR DATA: ", errorData);
+          console.log("LLEVANDO EL DATO: ", numJudgment)
+          throw new Error(errorData.detail || 'Failed to save orders data');
         }
       }
   
       alert('Datos de la tabla guardados correctamente.');
+      return true;
     } catch (error) {
       console.error('Error al guardar los datos de la tabla:', error);
       alert('Error al guardar los datos de la tabla: ' + error.message);
+      return false;
+    }
+  };
+
+  const handleSubmit = async (event) => {
+    if (event) {
+      event.preventDefault(); 
+    }
+  
+    try {
+      const isFormSaved = await handleFormSubmit();
+      
+      if (isFormSaved) {
+        const isTableSaved = await handleTableSubmit();
+        
+        if (isTableSaved) {
+          alert('Todos los datos se han guardado correctamente.');
+          navigate('/transaccion', { state: { numJudgment } });
+        } else {
+          alert('Error al guardar los datos de la tabla.');
+          navigate('/transaccion', { state: { numJudgment } });
+        }
+      } else {
+        alert('Error al guardar los datos del formulario.');
+        navigate('/transaccion', { state: { numJudgment } });
+      }
+    } catch (error) {
+      console.error('Error en handleSubmit:', error);
+      alert('Ocurrió un error inesperado.');
     }
   };
   
-
   const addNewRow = () => {
     setTableData([
       ...tableData,
@@ -135,7 +168,7 @@ const RequireDataComponent = () => {
 
   return (
     <div className="transaction-container">
-      <form className="transaction-form" onSubmit={handleFormSubmit}>
+      <form className="transaction-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="adjudicated">Juzgado:</label>
           <input
@@ -255,12 +288,6 @@ const RequireDataComponent = () => {
             readOnly
           />
         </div>
-        <div className="form-submit" style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>  
-          <Button type="submit" variant="contained" style={{ backgroundColor: 'green', color: 'white', fontSize: '0.7rem' }}>  
-              Guardar  
-          </Button>  
-        </div>
-      </form>
       <div className="table-header" style={{ display: 'flex', alignItems: 'center' }}>   
           <IconButton  
               color="primary"  
@@ -271,7 +298,6 @@ const RequireDataComponent = () => {
           </IconButton>  
           <h2 style={{ margin: 15 }}>Cuentas Ahorros-Corrientes</h2> 
       </div>
-      <form onSubmit={handleTableSubmit}>
         <table className="transaction-table">
           <thead>
             <tr>

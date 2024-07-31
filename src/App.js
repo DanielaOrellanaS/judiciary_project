@@ -9,8 +9,13 @@ import RequireDataComponent from './components/RequireDataComponent';
 import RetentionOrderComponent from './components/RetentionOrderComponent';
 import ReleaseOrderComponent from './components/ReleaseOrderComponent';
 import SeizureOrderComponent from './components/SeizureOrderComponent';
-import ResumeTableComponent from './components/ResumeTableComponent';
-import EditRequireDataComponent from './components/EditRequireComponent';
+import RequireDataTableComponent from './components/tableComponents/RequireDataTableComponent';
+import RetentionOrderTableComponent from './components/tableComponents/RetentionOrderTableComponent';
+import ReleaseOrderTableComponent from './components/tableComponents/ReleaseOrderTableComponent';
+import SeizureOrderTableComponent from './components/tableComponents/SeizureOrderTableComponent';
+import EditRetentionOrderComponent from './components/editComponents/EditRetentionOrderComponent';
+import EditRequireDataComponent from './components/editComponents/EditRequireComponent';
+import EditReleaseOrderComponent from './components/editComponents/EditReleaseOrderComponent';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -43,28 +48,48 @@ function App() {
             element={isLoggedIn ? <MenuTransactionComponent /> : <Navigate to="/" />}
           />
           <Route
-            path="/requerir-datos-cuenta"
+            path="/require-data"
             element={isLoggedIn ? <RequireDataComponent /> : <Navigate to="/" />}
           />
           <Route
-            path="/orden-retencion"
-            element={isLoggedIn ? <RetentionOrderComponent /> : <Navigate to="/" />}
-          />
-          <Route
-            path="/orden-liberacion"
-            element={isLoggedIn ? <ReleaseOrderComponent /> : <Navigate to="/" />}
-          />
-          <Route
-            path="/orden-embargo"
-            element={isLoggedIn ? <SeizureOrderComponent /> : <Navigate to="/" />}
-          />
-          <Route
-            path="/resume-table"
-            element={isLoggedIn ? <ResumeTableComponent /> : <Navigate to="/" />}
+            path="/table-require-data"
+            element={isLoggedIn ? <RequireDataTableComponent /> : <Navigate to="/" />}
           />
           <Route
             path="/edit-require-data"
             element={isLoggedIn ? <EditRequireDataComponent /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/retention-order"
+            element={isLoggedIn ? <RetentionOrderComponent /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/table-retention-order"
+            element={isLoggedIn ? <RetentionOrderTableComponent /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/edit-retention-order"
+            element={isLoggedIn ? <EditRetentionOrderComponent /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/release-order"
+            element={isLoggedIn ? <ReleaseOrderComponent /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/table-release-order"
+            element={isLoggedIn ? <ReleaseOrderTableComponent /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/edit-release-order"
+            element={isLoggedIn ? <EditReleaseOrderComponent /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/seizure-order"
+            element={isLoggedIn ? <SeizureOrderComponent /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/table-seizure-order"
+            element={isLoggedIn ? <SeizureOrderTableComponent /> : <Navigate to="/" />}
           />
         </Routes>
       </div>

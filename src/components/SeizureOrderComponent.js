@@ -1,113 +1,201 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import '../components.css';
+import { getJudgment, saveJudgment, saveOrdersSeizure } from '../Api';
 import { useLocation } from 'react-router-dom';
-import { getBankResponse, getJudgment, getOrders } from '../Api';
+import { IconButton } from '@mui/material';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
 
 const SeizureOrderComponent = () => {
-  const [combinedData, setCombinedData] = useState([]);
-
-  const [tableData, setTableData] = useState({
-    numJudgment: '',
-    bank: '',
-    amount: '',
-    cta: '',
-    accountStatus: '',
-    responseDate: '',
-    accountTypeBenef: '',
-    accountNumBenef: '',
-    identificationTypeBenef: '',
-    identificationBenef: '',
-  });
-
-  const [tableDataBenef, setTableDataBenef] = useState({
-    idOrder: '',
-    bankCode: '',
-    numOrder: '',
-    transactionStatusBank: '',
-    responseDate: '',
-    accountTypeBeneficiary: '',
-    accountNumBeneficiary: '',
-    amount: '',
-    identificationTypeBeneficiary: '',
-    identificationBeneficiary: '',
-    bankBeneficiary: '',
-    nameBeneficiary: '',
-    lastnameBeneficiary: '',
-    typeTxBeneficiary: '',
-  });
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setTableData(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
-
-    if (name === 'amount' && value) {
-      updateStatusAndDate();
-    }
-  };
-
-  const updateStatusAndDate = () => {
-    const randomIndex = Math.floor(Math.random() * combinedData.length);
-    const randomBankResponse = combinedData[randomIndex];
-    
-    setTableData(prevState => ({
-      ...prevState,
-      accountStatus: randomBankResponse.accountStatus,
-      responseDate: randomBankResponse.responseDate
-    }));
-  };
+  const location = useLocation();
+  const { numJudgment } = location.state || {};
+  const adjudicated = "QUITO CIVIL";
+  const orderType = 'SeizureOrder'; 
+  const navigate = useNavigate();
 
   const getCurrentDate = () => {
     const date = new Date();
     return date.toISOString().split('T')[0];
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const judgmentData = await getJudgment();
-        const bankData = await getBankResponse();
-        const ordersData = await getOrders();
+  const numOffice = "UJC-24790-2024-517";
 
-        const sortedOrders = ordersData.sort((a, b) => b.idOrder - a.idOrder); 
-        const lastOrder = sortedOrders[0] || {};
-
-        if (bankData.length > 0) {
-          const combined = judgmentData.map(item => {
-            return {
-              ...item,
-              accountType: bankData[0]?.accountType || '',
-              bank: bankData[0]?.bank || '',
-              accountNum: bankData[0]?.accountNum || '',
-              accountStatus: bankData[0]?.accountStatus || '',
-              responseDate: bankData[0]?.responseDate || '',
-              orderData: lastOrder
-            };
-          });
-
-          setCombinedData(combined);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  if (combinedData.length === 0) {
-    return <div>Loading...</div>;
+  function getRandomStatus() {
+    const statuses = ['Pendiente', 'OK', 'ERROR'];
+    const randomIndex = Math.floor(Math.random() * statuses.length);
+    return statuses[randomIndex];
   }
+  
+  const [retention, setRetention] = useState(''); 
 
-  const formData = combinedData[0];
+  const handleRetentionChange = (e) => {
+    setRetention(e.target.value);
+  };
 
-  console.log("QUE DATOS TENGO: ", formData)
+  const [formData, setFormData] = useState({
+    numJudgment: numJudgment || '0',
+    adjudicated: adjudicated || '',
+    judge: '',
+    mailOrderer: '', 
+    nameOrderer: '', 
+    positionOrderer: '',
+    name: '',
+    lastname: '', 
+    identificationType: '',
+    identification: '',
+    date: getCurrentDate() || ''
+  });
+
+  const [tableData, setTableData] = useState([
+    { 
+      orderType: orderType || '', 
+      transactionStatus: getRandomStatus() || '',
+      numOffice: numOffice || '', 
+      nameDefendant: '',
+      lastnameDefendant: '',
+      identificationTypeDefendant: '', 
+      identificationDefendant: '', 
+      amount: '', 
+      bankDefendant: '', 
+      accountTypeDefendant: '', 
+      accountNumDefendant: '',
+      bankBeneficiary: '',
+      accountTypeBeneficiary: '',
+      accountNumBeneficiary: '', 
+      identificationTypeBeneficiary: '', 
+      identificationBeneficiary: '', 
+      nameBeneficiary: '', 
+      lastnameBeneficiary: ''
+    }
+  ]);
+
+  const handleFormInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleTableInputChange = (index, event) => {
+    const { name, value } = event.target;
+    const updatedTableData = tableData.map((item, i) =>
+      i === index ? { ...item, [name]: value } : item
+    );
+    setTableData(updatedTableData);
+  };
+
+  const handleFormSubmit = async () => {
+    try {
+      const response = await saveJudgment(formData);
+      if (response.ok) {
+        alert('Datos guardados correctamente.');
+      }
+      return true;
+    } catch (error) {
+      console.error('Datos incompletos', error);
+      return false;
+    }
+  };
+
+  const handleTableSubmit = async () => {
+    const judgmentData = await getJudgment();
+  
+    const lastJudgmentId = judgmentData.reduce((maxId, judgment) => {
+      return judgment.idJudgment > maxId ? judgment.idJudgment : maxId;
+    }, 0);
+  
+    try {
+      for (const item of tableData) {
+        const updatedItem = {
+          orderType: orderType || '',
+          transactionStatus: getRandomStatus() || '',
+          numOffice: numOffice || '',
+          nameDefendant: item.nameDefendant || '',
+          lastnameDefendant: item.lastnameDefendant || '',
+          identificationTypeDefendant: item.identificationTypeDefendant || '',
+          identificationDefendant: item.identificationDefendant || '',
+          idJudgment: lastJudgmentId,
+          amount: parseFloat(item.amount) || 0,
+          bankDefendant: item.bankDefendant || '',
+          accountTypeDefendant: item.accountTypeDefendant || '',
+          accountNumDefendant: parseFloat(item.accountNumDefendant) || 0,
+          bankBeneficiary: item.bankBeneficiary || '',
+          accountTypeBeneficiary: item.bankBeneficiary || '',
+          accountNumBeneficiary: parseFloat(item.accountNumBeneficiary) || 0,
+          identificationTypeBeneficiary: item.identificationTypeBeneficiary || '',
+          identificationBeneficiary: item.identificationBeneficiary || '',
+          nameBeneficiary: item.nameBeneficiary || '',
+          lastnameBeneficiary: item.lastnameBeneficiary || ''
+        };
+  
+        console.log("DATA ENVIADA DESDE SAVE ORDERS: ", JSON.stringify(updatedItem));
+        
+        const response = await saveOrdersSeizure(updatedItem);
+  
+        if (response && response.ok) {
+          console.log("Order saved successfully:", response);
+        } else {
+          const errorData = await response.json();
+          console.error("RESPONSE ERROR DATA: ", errorData);
+          throw new Error(errorData.detail || 'Failed to save orders data');
+        }
+      }
+  
+      alert('Datos de la tabla guardados correctamente.');
+      return true;
+    } catch (error) {
+      console.error('Error al guardar los datos de la tabla:', error);
+      alert('Error al guardar los datos de la tabla: ' + error.message);
+      return false;
+    }
+  };
+
+  const handleSubmit = async (event) => {
+    if (event) {
+      event.preventDefault(); 
+    }
+  
+    try {
+      const isFormSaved = await handleFormSubmit();
+      
+      if (isFormSaved) {
+        const isTableSaved = await handleTableSubmit();
+        
+        if (isTableSaved) {
+          alert('Todos los datos se han guardado correctamente.');
+          navigate('/transaccion', { state: { numJudgment } });
+        } else {
+          alert('Error al guardar los datos de la tabla.');
+          navigate('/transaccion', { state: { numJudgment } });
+        }
+      } else {
+        alert('Error al guardar los datos del formulario.');
+        navigate('/transaccion', { state: { numJudgment } });
+      }
+    } catch (error) {
+      console.error('Error en handleSubmit:', error);
+      alert('Ocurrió un error inesperado.');
+    }
+  };
+  
+  const addNewRow = () => {
+    setTableData([
+      ...tableData,
+      { orderType: orderType || '', transactionStatus: getRandomStatus() || '', numOffice: numOffice || '', nameDefendant: '', lastnameDefendant: '', identificationTypeDefendant: '', identificationDefendant: '' }
+    ]);
+  };
+
+  const deleteRow = (index) => {
+    const updatedTableData = tableData.filter((_, i) => i !== index);
+    setTableData(updatedTableData);
+  };
 
   return (
     <div className="transaction-container">
-      <form className="transaction-form">
+      <form className="transaction-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="adjudicated">Juzgado:</label>
           <input
@@ -115,7 +203,7 @@ const SeizureOrderComponent = () => {
             id="adjudicated"
             name="adjudicated"
             value={formData.adjudicated}
-            readOnly
+            onChange={handleFormInputChange}
           />
         </div>
         <div className="form-group">
@@ -125,38 +213,86 @@ const SeizureOrderComponent = () => {
             id="judge"
             name="judge"
             value={formData.judge}
-            readOnly
+            onChange={handleFormInputChange}
           />
         </div>
         <div className="form-group">
-          <label htmlFor="mail">Mail:</label>
-          <input
-            type="email"
-            id="mail"
-            name="mail"
-            value={"jsegalla@cnj.gob.ec"}
-            readOnly
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="cargo">Cargo:</label>
+          <label htmlFor="oficio">Oficio No:</label>
           <input
             type="text"
-            id="cargo"
-            name="cargo"
-            value={"Secretario"}
+            id="oficio"
+            name="oficio"
+            value={numOffice}
+            readOnly
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="mailOrderer">Mail:</label>
+          <input
+            type="text"
+            id="mailOrderer"
+            name="mailOrderer"
+            value={formData.mailOrderer}
+            onChange={handleFormInputChange}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="positionOrderer">Cargo:</label>
+          <input
+            type="text"
+            id="positionOrderer"
+            name="positionOrderer"
+            value={formData.positionOrderer}
+            onChange={handleFormInputChange}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="numJudgment">Juicio:</label>
+          <input
+            type="text"
+            id="numJudgment"
+            name="numJudgment"
+            value={formData.numJudgment}
+            onChange={handleFormInputChange}
             readOnly
           />
         </div>
         <div className="form-group">
           <label htmlFor="name">Datos accionado:</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            readOnly
-          />
+          <div className="input-group">
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleFormInputChange}
+              placeholder="Nombres"
+            />
+            <div>
+              <input
+                type="text"
+                id="lastname"
+                name="lastname"
+                value={formData.lastname}
+                onChange={handleFormInputChange}
+                placeholder="Apellidos"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="form-group">
+          <label htmlFor="identificationType">Tipo Identificación:</label>
+          <select
+            id="identificationType"
+            name="identificationType"
+            value={formData.identificationType}
+            onChange={handleFormInputChange}
+          >
+            <option value="">Seleccione...</option>
+            <option value="cedula">Cédula</option>
+            <option value="pasaporte">Pasaporte</option>
+            <option value="ruc">RUC</option>
+          </select>
         </div>
         <div className="form-group">
           <label htmlFor="identification">Identificacion Demandante:</label>
@@ -165,143 +301,239 @@ const SeizureOrderComponent = () => {
             id="identification"
             name="identification"
             value={formData.identification}
-            readOnly
+            onChange={handleFormInputChange}
           />
         </div>
         <div className="form-group">
-          <label htmlFor="fecha">Fecha:</label>
-          <input
-            type="date"
-            id="fecha"
-            name="fecha"
-            value={getCurrentDate()}
-            readOnly
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="judicialReleaseOrder">Auto de Embargo Judicial:</label>
+          <label htmlFor="retention">Auto de Embargo:</label>
           <input
             type="text"
-            id="judicialReleaseOrder"
-            name="judicialReleaseOrder"
-            value={"2000"}
-            readOnly
+            id="retention"
+            name="retention"
+            value={retention}
+            onChange={handleRetentionChange} 
           />
         </div>
+        <div className="form-container" style={{ display: 'flex', flexDirection: 'column' }}>
+          <div className="form-group" style={{ marginBottom: '20px' }}>
+            <label htmlFor="fecha">Fecha:</label>
+            <input
+              type="date"
+              id="fecha"
+              name="fecha"
+              value={formData.date}
+              readOnly
+            />
+          </div>
+          <div className="table-header" style={{ display: 'flex', alignItems: 'center', marginTop: '20px' }}>
+            <IconButton  
+              color="primary"  
+              onClick={addNewRow}  
+              style={{ color: 'green', borderRadius: '50%', width: '15px', height: '15px' }}  
+            >  
+              <AddCircleIcon fontSize="large" />  
+            </IconButton>  
+            <h2 style={{ margin: 15 }}>Cuentas Ahorros-Corrientes</h2>
+          </div>
+        </div>
+        <table className="transaction-table">
+          <thead>
+            <tr>
+              <th>Nombres</th>
+              <th>Apellidos</th>
+              <th>Tipo identificación</th>
+              <th>Identificación</th>
+              <th>Num Oficio</th>
+              <th>Monto</th>
+              <th>Banco</th>
+              <th>Tipo Cuenta</th>
+              <th>Num Cuenta</th>
+              <th>Tipo Cuenta Benef</th>
+              <th>Num Cuenta</th>
+              <th>Tipo Identification</th>
+              <th>Identificacion</th>
+              <th>Banco</th>
+              <th>Nombres</th>
+              <th>Apellidos</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tableData.map((row, index) => (
+              <tr key={index}>
+                <td>
+                  <input
+                    type="text"
+                    id="nameDefendant"
+                    name="nameDefendant"
+                    value={row.nameDefendant}
+                    onChange={(e) => handleTableInputChange(index, e)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    id="lastnameDefendant"
+                    name="lastnameDefendant"
+                    value={row.lastnameDefendant}
+                    onChange={(e) => handleTableInputChange(index, e)}
+                  />
+                </td>
+                <td>
+                  <select
+                    id="identificationTypeDefendant"
+                    name="identificationTypeDefendant"
+                    value={row.identificationTypeDefendant}
+                    onChange={(e) => handleTableInputChange(index, e)}
+                  >
+                    <option value="">Seleccione...</option>
+                    <option value="cedula">Cédula</option>
+                    <option value="pasaporte">Pasaporte</option>
+                    <option value="ruc">RUC</option>
+                  </select>
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    id="identificationDefendant"
+                    name="identificationDefendant"
+                    value={row.identificationDefendant}
+                    onChange={(e) => handleTableInputChange(index, e)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    id="numOffice"
+                    name="numOffice"
+                    value={row.numOffice}
+                    onChange={(e) => handleTableInputChange(index, e)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    id="amount"
+                    name="amount"
+                    value={row.amount}
+                    onChange={(e) => handleTableInputChange(index, e)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    id="bankDefendant"
+                    name="bankDefendant"
+                    value={row.bankDefendant}
+                    onChange={(e) => handleTableInputChange(index, e)}
+                  />
+                </td>
+                <td>
+                  <select
+                    id="accountTypeDefendant"
+                    name="accountTypeDefendant"
+                    value={row.accountTypeDefendant}
+                    onChange={(e) => handleTableInputChange(index, e)}
+                  >
+                    <option value="">Seleccione...</option>
+                    <option value="ahorros">Ahorros</option>
+                    <option value="corriente">Corriente</option>
+                  </select>
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    id="accountNumDefendant"
+                    name="accountNumDefendant"
+                    value={row.accountNumDefendant}
+                    onChange={(e) => handleTableInputChange(index, e)}
+                  />
+                </td>
+                <td>
+                  <select
+                    id="accountTypeBeneficiary"
+                    name="accountTypeBeneficiary"
+                    value={row.accountTypeBeneficiary}
+                    onChange={(e) => handleTableInputChange(index, e)}
+                  >
+                    <option value="">Seleccione...</option>
+                    <option value="ahorros">Ahorros</option>
+                    <option value="corriente">Corriente</option>
+                  </select>
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    id="accountNumBeneficiary"
+                    name="accountNumBeneficiary"
+                    value={row.accountNumBeneficiary}
+                    onChange={(e) => handleTableInputChange(index, e)}
+                  />
+                </td>
+                <td>
+                  <select
+                    id="identificationTypeBeneficiary"
+                    name="identificationTypeBeneficiary"
+                    value={row.identificationTypeBeneficiary}
+                    onChange={(e) => handleTableInputChange(index, e)}
+                  >
+                    <option value="">Seleccione...</option>
+                    <option value="cedula">Cédula</option>
+                    <option value="pasaporte">Pasaporte</option>
+                    <option value="ruc">RUC</option>
+                  </select>
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    id="identificationBeneficiary"
+                    name="identificationBeneficiary"
+                    value={row.identificationBeneficiary}
+                    onChange={(e) => handleTableInputChange(index, e)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    id="bankBeneficiary"
+                    name="bankBeneficiary"
+                    value={row.bankBeneficiary}
+                    onChange={(e) => handleTableInputChange(index, e)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    id="nameBeneficiary"
+                    name="nameBeneficiary"
+                    value={row.nameBeneficiary}
+                    onChange={(e) => handleTableInputChange(index, e)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    id="lastnameBeneficiary"
+                    name="lastnameBeneficiary"
+                    value={row.lastnameBeneficiary}
+                    onChange={(e) => handleTableInputChange(index, e)}
+                  />
+                </td>
+                <td>
+                  <IconButton color="secondary" onClick={() => deleteRow(index)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <div className="table-actions" style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>  
+            <Button type="submit" variant="contained" style={{ backgroundColor: 'green', color: 'white', fontSize: '0.7rem' }}>  
+                Guardar Datos  
+            </Button>  
+        </div>
       </form>
-      <div className="table-header">
-        <h2>Cuentas Ahorros-Corrientes</h2>
-      </div>
-      <table className="transaction-table">
-        <thead>
-          <tr>
-            <th>Nombres</th>
-            <th>Apellido</th>
-            <th>Tipo identificación</th>
-            <th>Identificacion</th>
-            <th>Numero Oficio</th>
-            <th>Tipo de cuenta</th>
-            <th>CTA</th>
-            <th>Tipo de cuenta Benef</th>
-            <th>Num Cuenta Benef</th>
-            <th>Monto</th>
-            <th>CI Tipo Benef</th>
-            <th>CI Benef</th>
-            <th>Banco Benef</th>
-            <th>Nombre Benef</th>
-            <th>Apellido Benef</th>
-            <th>Tipo TX</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{formData.orderData.nameDefendant}</td>
-            <td>{formData.orderData.lastnameDefendant}</td> {/* Nueva celda añadida */}
-            <td>{formData.orderData.identificationTypeDefendant}</td>
-            <td>{formData.orderData.identificationDefendant}</td>
-            <td>{formData.numJudgment}</td>
-            <td>{formData.accountType}</td>
-            <td>{formData.accountNum}</td>
-            <td>
-              <input
-                type="text"
-                name="accountTypeBeneficiary"
-                value={tableDataBenef.accountTypeBeneficiary}
-                onChange={handleInputChange}
-              />
-            </td>
-            <td>
-              <input
-                type="text"
-                name="accountNumBeneficiary"
-                value={tableDataBenef.accountNumBeneficiary}
-                onChange={handleInputChange}
-              />
-            </td>
-            <td>
-              <input
-                type="text"
-                name="amount"
-                value={tableDataBenef.amount}
-                onChange={handleInputChange}
-              />
-            </td>
-            <td>
-              <select
-                id="identificationTypeBeneficiary"
-                name="identificationTypeBeneficiary"
-                value={tableDataBenef.identificationTypeBeneficiary}
-                onChange={handleInputChange}
-              >
-                <option value="">Seleccione...</option>
-                <option value="cedula">Cédula</option>
-                <option value="pasaporte">Pasaporte</option>
-                <option value="ruc">RUC</option>
-              </select>
-            </td>
-            <td>
-              <input
-                type="text"
-                name="identificationBeneficiary"
-                value={tableDataBenef.identificationBeneficiary}
-                onChange={handleInputChange}
-              />
-            </td>
-            <td>
-              <input
-                type="text"
-                name="bankBeneficiary"
-                value={tableDataBenef.bankBeneficiary}
-                onChange={handleInputChange}
-              />
-            </td>
-            <td>
-              <input
-                type="text"
-                name="nameBeneficiary"
-                value={tableDataBenef.nameBeneficiary}
-                onChange={handleInputChange}
-              />
-            </td>
-            <td>
-              <input
-                type="text"
-                name="lastnameBeneficiary"
-                value={tableDataBenef.lastnameBeneficiary}
-                onChange={handleInputChange}
-              />
-            </td>
-            <td>
-              <input
-                type="text"
-                name="typeTxBeneficiary"
-                value={tableDataBenef.typeTxBeneficiary}
-                onChange={handleInputChange}
-              />
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   );
 };
