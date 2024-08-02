@@ -16,6 +16,7 @@ import SeizureOrderTableComponent from './components/tableComponents/SeizureOrde
 import EditRetentionOrderComponent from './components/editComponents/EditRetentionOrderComponent';
 import EditRequireDataComponent from './components/editComponents/EditRequireComponent';
 import EditReleaseOrderComponent from './components/editComponents/EditReleaseOrderComponent';
+import EditSeizureOrderComponent from './components/editComponents/EditSeizureOrderComponent';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -90,6 +91,10 @@ function App() {
           <Route
             path="/table-seizure-order"
             element={isLoggedIn ? <SeizureOrderTableComponent /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/edit-seizure-order"
+            element={isLoggedIn ? <EditSeizureOrderComponent /> : <Navigate to="/" />}
           />
         </Routes>
       </div>

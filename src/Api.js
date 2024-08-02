@@ -160,6 +160,29 @@ export async function updateOrdersRelease(id, data) {
   }
 }
 
+export async function updateOrdersSeizure(id, data) {
+  try {
+    const response = await fetch(`${apiUrl}/orders_seizure/${id}/`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.detail || 'Failed to update judgment');
+    }
+
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    console.error('Error updating judgment:', error);
+    throw error;
+  }
+}
+
 export async function getBankResponse() {
   try {
     const response = await fetch(`${apiUrl}/bank_order_details/`, {
