@@ -121,25 +121,13 @@ const ReleaseOrderComponent = () => {
           accountTypeDefendant: item.accountTypeDefendant || '',
           accountNumDefendant: parseFloat(item.accountNumDefendant) || 0 
         };
-  
-        console.log("DATA ENVIADA DESDE SAVE ORDERS: ", JSON.stringify(updatedItem));
-        
+
         const response = await saveOrdersRelease(updatedItem);
-  
-        if (response && response.ok) {
-          console.log("Order saved successfully:", response);
-        } else {
-          const errorData = await response.json();
-          console.error("RESPONSE ERROR DATA: ", errorData);
-          throw new Error(errorData.detail || 'Failed to save orders data');
-        }
+        console.log("Order saved successfully:", response);
       }
-  
-      alert('Datos de la tabla guardados correctamente.');
       return true;
     } catch (error) {
       console.error('Error al guardar los datos de la tabla:', error);
-      alert('Error al guardar los datos de la tabla: ' + error.message);
       return false;
     }
   };

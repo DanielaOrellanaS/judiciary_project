@@ -179,23 +179,14 @@ const EditSeizureOrderComponent = () => {
           identificationDefendant: item.identificationDefendant || '',
           idJudgment: lastJudgmentId,
         };
-  
-        console.log("DATA ENVIADA DESDE SAVE ORDERS: ", JSON.stringify(updatedItem));
-  
+        
         const response = await updateOrdersSeizure(item.idOrder, updatedItem);
   
-        if (!response.ok) {
-          const errorData = await response.json();
-          console.error("RESPONSE ERROR DATA: ", errorData);
-          throw new Error(errorData.detail || 'Failed to save orders data');
-        }
+        console.log("Order saved successfully:", response);
       }
-  
-      alert('Datos de la tabla guardados correctamente.');
       return true;
     } catch (error) {
-      console.error('Error al guardar los datos de la tabla:', error);
-      alert('Error al guardar los datos de la tabla: ' + error.message);
+      console.log('Error al guardar los datos de la tabla:', error);
       return false;
     }
   };   

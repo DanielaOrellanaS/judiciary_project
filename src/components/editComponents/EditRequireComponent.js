@@ -129,7 +129,7 @@ const EditRequireDataComponent = () => {
     try {
       const response = await updateJudgment(idJudgment, formData);
       if (response.ok) {
-        alert('Datos guardados correctamente.');
+        console.log('Datos guardados correctamente.');
       }
       return true;
     } catch (error) {
@@ -157,19 +157,10 @@ const EditRequireDataComponent = () => {
           identificationDefendant: item.identificationDefendant || '',
           idJudgment: lastJudgmentId,
         };
-  
-        console.log("DATA ENVIADA DESDE SAVE ORDERS: ", JSON.stringify(updatedItem));
-  
+
         const response = await updateOrders(item.idOrder, updatedItem);
-  
-        if (!response.ok) {
-          const errorData = await response.json();
-          console.error("RESPONSE ERROR DATA: ", errorData);
-          throw new Error(errorData.detail || 'Failed to save orders data');
-        }
+        console.log("Order saved successfully:", response);
       }
-  
-      alert('Datos de la tabla guardados correctamente.');
       return true;
     } catch (error) {
       console.error('Error al guardar los datos de la tabla:', error);

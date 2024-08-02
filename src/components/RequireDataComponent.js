@@ -111,8 +111,6 @@ const RequireDataComponent = () => {
   
         console.log("Order saved successfully:", response);
       }
-  
-      alert('Datos de la tabla guardados correctamente.');
       return true;
     } catch (error) {
       console.log('Error: ', error)
