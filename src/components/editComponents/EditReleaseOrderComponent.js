@@ -7,6 +7,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
+import bankOptions from '../../bankOptions';
 
 const EditReleaseOrderComponent = () => {
   const location = useLocation();
@@ -14,12 +15,15 @@ const EditReleaseOrderComponent = () => {
   const orderType = 'ReleaseOrder';
   const navigate = useNavigate();
 
-  const getCurrentDate = () => {
-    const date = new Date();
-    return date.toISOString().split('T')[0];
+  const formatDate = (isoString) => {
+    return isoString.split('T')[0];
   };
 
   const numOffice = "UJC-24790-2024-517";
+
+  const handleCancel = () => {
+    navigate(-1); 
+  };
 
   function getRandomStatus() {
     const statuses = ['Pendiente', 'OK', 'ERROR'];
@@ -42,7 +46,7 @@ const EditReleaseOrderComponent = () => {
     lastname: '', 
     identificationType: '',
     identification: '',
-    date: getCurrentDate() || ''
+    date: ''
   });
 
   const [tableData, setTableData] = useState([
@@ -79,7 +83,7 @@ const EditReleaseOrderComponent = () => {
           lastname: data.lastname || '',
           identificationType: data.identificationType || '',
           identification: data.identification || '',
-          date: data.date || getCurrentDate(),
+          date: data.date || ''
         });
 
         setTableData(tableData.map(item => ({
@@ -328,12 +332,12 @@ const EditReleaseOrderComponent = () => {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="fecha">Fecha:</label>
+          <label htmlFor="date">Fecha:</label>
           <input
             type="date"
-            id="fecha"
-            name="fecha"
-            value={formData.date}
+            id="date"
+            name="date"
+            value={formatDate(formData.date)}
             readOnly
           />
         </div>
@@ -412,13 +416,19 @@ const EditReleaseOrderComponent = () => {
                   />
                 </td>
                 <td>
-                  <input
-                    type="text"
+                  <select
+                    id="bank"
                     name="bank"
                     value={row.bank || ''}
-                    onChange={(event) => handleTableInputChange(index, event)}
-                    readOnly
-                  />
+                    onChange={(e) => handleTableInputChange(index, e)}
+                  >
+                    <option value="">Seleccione...</option>
+                    {bankOptions.map((bank, idx) => (
+                      <option key={idx} value={bank}>
+                        {bank}
+                      </option>
+                    ))}
+                  </select>
                 </td>
                 <td>
                   <input
@@ -467,12 +477,17 @@ const EditReleaseOrderComponent = () => {
 
           </tbody>
         </table>
-        <div className="table-actions">
-          <div className="table-actions" style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>  
-            <Button type="submit" variant="contained" style={{ backgroundColor: 'green', color: 'white', fontSize: '0.7rem' }}>  
-                Actualizar Datos  
-            </Button>  
-        </div>
+        <div className="table-actions" style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
+          <Button 
+            type="submit" 
+            variant="contained" 
+            style={{ backgroundColor: 'green', color: 'white', fontSize: '0.7rem', marginRight: '1rem' }}
+          >
+            Guardar Datos
+          </Button>
+          <Button variant="contained" style={{ backgroundColor: 'green', color: 'white', fontSize: '0.7rem', marginRight: '1rem' }} onClick={handleCancel}>
+              Cancelar
+          </Button>
         </div>
       </form>
     </div>

@@ -7,6 +7,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
+import bankOptions from '../bankOptions';
 
 const ReleaseOrderComponent = () => {
   const location = useLocation();
@@ -21,6 +22,10 @@ const ReleaseOrderComponent = () => {
   };
 
   const numOffice = "UJC-24790-2024-517";
+
+  const handleCancel = () => {
+    navigate(-1); 
+  };
 
   function getRandomStatus() {
     const statuses = ['Pendiente', 'OK', 'ERROR'];
@@ -399,13 +404,19 @@ const ReleaseOrderComponent = () => {
                   />
                 </td>
                 <td>
-                  <input
-                    type="text"
+                  <select
                     id="bankDefendant"
                     name="bankDefendant"
-                    value={row.bankDefendant}
+                    value={row.bankDefendant || ''}
                     onChange={(e) => handleTableInputChange(index, e)}
-                  />
+                  >
+                    <option value="">Seleccione...</option>
+                    {bankOptions.map((bank, idx) => (
+                      <option key={idx} value={bank}>
+                        {bank}
+                      </option>
+                    ))}
+                  </select>
                 </td>
                 <td>
                   <input
@@ -434,10 +445,17 @@ const ReleaseOrderComponent = () => {
             ))}
           </tbody>
         </table>
-        <div className="table-actions" style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>  
-            <Button type="submit" variant="contained" style={{ backgroundColor: 'green', color: 'white', fontSize: '0.7rem' }}>  
-                Guardar Datos  
-            </Button>  
+        <div className="table-actions" style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
+          <Button 
+            type="submit" 
+            variant="contained" 
+            style={{ backgroundColor: 'green', color: 'white', fontSize: '0.7rem', marginRight: '1rem' }}
+          >
+            Guardar Datos
+          </Button>
+          <Button variant="contained" style={{ backgroundColor: 'green', color: 'white', fontSize: '0.7rem', marginRight: '1rem' }} onClick={handleCancel}>
+              Cancelar
+          </Button>
         </div>
       </form>
     </div>
