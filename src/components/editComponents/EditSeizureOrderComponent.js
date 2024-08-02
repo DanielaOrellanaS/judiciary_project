@@ -1,25 +1,19 @@
-import React, { useState } from 'react';
-import '../components.css';
-import { getJudgment, saveJudgment, saveOrdersSeizure } from '../Api';
+import React, { useState, useEffect } from 'react';
+import '../../components.css';
+import { getJudgmentById, updateJudgment, getOrdersSeizureByJudgmentIdAndOrderType, getBankResponse, getBankResponseById, getJudgment, updateOrdersSeizure } from '../../Api';
 import { useLocation } from 'react-router-dom';
 import { IconButton } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
-import bankOptions from '../bankOptions';
+import bankOptions from '../../bankOptions';
 
-const SeizureOrderComponent = () => {
+const EditSeizureOrderComponent = () => {
   const location = useLocation();
-  const { numJudgment } = location.state || {};
-  const adjudicated = "QUITO CIVIL";
-  const orderType = 'SeizureOrder'; 
+  const { idJudgment, numJudgment } = location.state || {};
+  const orderType = 'SeizureOrder';
   const navigate = useNavigate();
-
-  const getCurrentDate = () => {
-    const date = new Date();
-    return date.toISOString().split('T')[0];
-  };
 
   const numOffice = "UJC-24790-2024-517";
 
@@ -27,41 +21,45 @@ const SeizureOrderComponent = () => {
     navigate(-1); 
   };
 
+  const formatDate = (isoString) => {
+    return isoString.split('T')[0];
+  };
+
   function getRandomStatus() {
     const statuses = ['Pendiente', 'OK', 'ERROR'];
     const randomIndex = Math.floor(Math.random() * statuses.length);
     return statuses[randomIndex];
   }
-  
-  const [retention, setRetention] = useState(''); 
 
-  const handleRetentionChange = (e) => {
-    setRetention(e.target.value);
-  };
+  function getRandomId(ids) {
+    const randomIndex = Math.floor(Math.random() * ids.length);
+    return ids[randomIndex];
+  }    
 
   const [formData, setFormData] = useState({
-    numJudgment: numJudgment || '0',
-    adjudicated: adjudicated || '',
+    numJudgment: numJudgment || '',
+    adjudicated: '',
     judge: '',
     mailOrderer: '', 
-    nameOrderer: '', 
     positionOrderer: '',
     name: '',
     lastname: '', 
     identificationType: '',
     identification: '',
-    date: getCurrentDate() || ''
+    date: ''
   });
 
   const [tableData, setTableData] = useState([
     { 
-      orderType: orderType || '', 
-      transactionStatus: getRandomStatus() || '',
-      numOffice: numOffice || '', 
+      orderType: '', 
+      transactionStatus: getRandomStatus(),
+      numOffice: '', 
       nameDefendant: '',
       lastnameDefendant: '',
       identificationTypeDefendant: '', 
       identificationDefendant: '', 
+      accountType: '', 
+      bank: '', 
       amount: '', 
       bankDefendant: '', 
       accountTypeDefendant: '', 
@@ -72,9 +70,66 @@ const SeizureOrderComponent = () => {
       identificationTypeBeneficiary: '', 
       identificationBeneficiary: '', 
       nameBeneficiary: '', 
-      lastnameBeneficiary: ''
+      lastnameBeneficiary: '',
+      responseDate: ''
     }
   ]);
+
+  useEffect(() => {
+    const fetchJudgmentData = async () => {
+      try {
+        const data = await getJudgmentById(idJudgment);
+        const tableData = await getOrdersSeizureByJudgmentIdAndOrderType(idJudgment, orderType); 
+        console.log("DATOS FILTRADOS: ", tableData)
+        const randomResponse = await getBankResponse().then(allResponses => getBankResponseById(getRandomId(allResponses.map(response => response.id))));
+        setFormData({
+          judge: data.judge || '',
+          adjudicated: data.adjudicated || '',
+          numJudgment: numJudgment || '',
+          mailOrderer: data.mailOrderer || '',
+          positionOrderer: data.positionOrderer || '',
+          name: data.name || '',
+          lastname: data.lastname || '',
+          identificationType: data.identificationType || '',
+          identification: data.identification || '',
+          date: data.date || ''
+        });
+
+        setTableData(tableData.map(item => ({
+            idOrder: item.idOrder || '',
+            identificationDefendant: item.identificationDefendant || '',
+            identificationTypeDefendant: item.identificationTypeDefendant || '',
+            lastnameDefendant: item.lastnameDefendant || '',
+            nameDefendant: item.nameDefendant || '',
+            numOffice: item.numOffice || '',
+            orderType: item.orderType || '',
+            accountType: item.accountType || '',
+            accountNum: item.accountNum || '',
+            accountStatus: item.accountStatus || '',
+            bank: item.bank || '',
+            idJudgment: item.lastJudgmentId || '',
+            amount: parseFloat(item.amount) || 0,
+            bankDefendant: item.bankDefendant || '',
+            accountTypeDefendant: item.accountTypeDefendant || '',
+            accountNumDefendant: parseFloat(item.accountNumDefendant) || 0,
+            bankBeneficiary: item.bankBeneficiary || '',
+            accountTypeBeneficiary: item.accountTypeBeneficiary || '',
+            accountNumBeneficiary: parseFloat(item.accountNumBeneficiary) || 0,
+            identificationTypeBeneficiary: item.identificationTypeBeneficiary || '',
+            identificationBeneficiary: item.identificationBeneficiary || '',
+            nameBeneficiary: item.nameBeneficiary || '',
+            lastnameBeneficiary: item.lastnameBeneficiary || '',
+            transactionStatus: randomResponse.txStatus || '',
+            responseDate: randomResponse.responseDate || ''
+          })));
+          
+      } catch (error) {
+        console.error('Error fetching judgment data:', error);
+      }
+    };
+
+    fetchJudgmentData();
+  }, [idJudgment, numJudgment]);
 
   const handleFormInputChange = (event) => {
     const { name, value } = event.target;
@@ -94,13 +149,13 @@ const SeizureOrderComponent = () => {
 
   const handleFormSubmit = async () => {
     try {
-      const response = await saveJudgment(formData);
+      const response = await updateJudgment(idJudgment, formData);
       if (response.ok) {
         alert('Datos guardados correctamente.');
       }
       return true;
     } catch (error) {
-      console.error('Datos incompletos', error);
+      console.error('Error al actualizar los datos:', error);
       return false;
     }
   };
@@ -123,26 +178,13 @@ const SeizureOrderComponent = () => {
           identificationTypeDefendant: item.identificationTypeDefendant || '',
           identificationDefendant: item.identificationDefendant || '',
           idJudgment: lastJudgmentId,
-          amount: parseFloat(item.amount) || 0,
-          bankDefendant: item.bankDefendant || '',
-          accountTypeDefendant: item.accountTypeDefendant || '',
-          accountNumDefendant: parseFloat(item.accountNumDefendant) || 0,
-          bankBeneficiary: item.bankBeneficiary || '',
-          accountTypeBeneficiary: item.bankBeneficiary || '',
-          accountNumBeneficiary: parseFloat(item.accountNumBeneficiary) || 0,
-          identificationTypeBeneficiary: item.identificationTypeBeneficiary || '',
-          identificationBeneficiary: item.identificationBeneficiary || '',
-          nameBeneficiary: item.nameBeneficiary || '',
-          lastnameBeneficiary: item.lastnameBeneficiary || ''
         };
   
         console.log("DATA ENVIADA DESDE SAVE ORDERS: ", JSON.stringify(updatedItem));
-        
-        const response = await saveOrdersSeizure(updatedItem);
   
-        if (response && response.ok) {
-          console.log("Order saved successfully:", response);
-        } else {
+        const response = await updateOrdersSeizure(item.idOrder, updatedItem);
+  
+        if (!response.ok) {
           const errorData = await response.json();
           console.error("RESPONSE ERROR DATA: ", errorData);
           throw new Error(errorData.detail || 'Failed to save orders data');
@@ -156,40 +198,41 @@ const SeizureOrderComponent = () => {
       alert('Error al guardar los datos de la tabla: ' + error.message);
       return false;
     }
-  };
+  };   
 
   const handleSubmit = async (event) => {
     if (event) {
-      event.preventDefault(); 
+      event.preventDefault();
     }
-  
+
     try {
       const isFormSaved = await handleFormSubmit();
-      
+
       if (isFormSaved) {
         const isTableSaved = await handleTableSubmit();
-        
+
         if (isTableSaved) {
           alert('Todos los datos se han guardado correctamente.');
-          navigate('/transaccion', { state: { numJudgment } });
+          navigate('/transaccion');
         } else {
           alert('Error al guardar los datos de la tabla.');
-          navigate('/transaccion', { state: { numJudgment } });
+          navigate('/transaccion');
         }
       } else {
         alert('Error al guardar los datos del formulario.');
-        navigate('/transaccion', { state: { numJudgment } });
+        navigate('/transaccion');
       }
     } catch (error) {
       console.error('Error en handleSubmit:', error);
       alert('Ocurrió un error inesperado.');
+      navigate('/transaccion');
     }
   };
-  
+
   const addNewRow = () => {
     setTableData([
       ...tableData,
-      { orderType: orderType || '', transactionStatus: getRandomStatus() || '', numOffice: numOffice || '', nameDefendant: '', lastnameDefendant: '', identificationTypeDefendant: '', identificationDefendant: '' }
+      { orderType: orderType, transactionStatus: getRandomStatus(), numOffice: numOffice, nameDefendant: '', lastnameDefendant: '', identificationTypeDefendant: '', identificationDefendant: '' }
     ]);
   };
 
@@ -310,41 +353,29 @@ const SeizureOrderComponent = () => {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="retention">Auto de Embargo:</label>
+          <label htmlFor="date">Fecha:</label>
           <input
-            type="text"
-            id="retention"
-            name="retention"
-            value={retention}
-            onChange={handleRetentionChange} 
+            type="date"
+            id="date"
+            name="date"
+            value={formatDate(formData.date)}
+            readOnly
           />
         </div>
-        <div className="form-container" style={{ display: 'flex', flexDirection: 'column' }}>
-          <div className="form-group" style={{ marginBottom: '20px' }}>
-            <label htmlFor="fecha">Fecha:</label>
-            <input
-              type="date"
-              id="fecha"
-              name="fecha"
-              value={formData.date}
-              readOnly
-            />
-          </div>
-          <div className="table-header" style={{ display: 'flex', alignItems: 'center', marginTop: '20px' }}>
-            <IconButton  
+      <div className="table-header" style={{ display: 'flex', alignItems: 'center' }}>   
+          <IconButton  
               color="primary"  
               onClick={addNewRow}  
               style={{ color: 'green', borderRadius: '50%', width: '15px', height: '15px' }}  
-            >  
+          >  
               <AddCircleIcon fontSize="large" />  
-            </IconButton>  
-            <h2 style={{ margin: 15 }}>Cuentas Ahorros-Corrientes</h2>
-          </div>
-        </div>
+          </IconButton>  
+          <h2 style={{ margin: 15 }}>Cuentas Ahorros-Corrientes</h2> 
+      </div>
         <table className="transaction-table">
           <thead>
             <tr>
-              <th>Nombres</th>
+            <th>Nombres</th>
               <th>Apellidos</th>
               <th>Tipo identificación</th>
               <th>Identificación</th>
@@ -353,43 +384,43 @@ const SeizureOrderComponent = () => {
               <th>Banco</th>
               <th>Tipo Cuenta</th>
               <th>Num Cuenta</th>
+              <th>Nombres Benef</th>
+              <th>Apellidos</th>
               <th>Tipo Cuenta Benef</th>
               <th>Num Cuenta</th>
               <th>Tipo Identification</th>
               <th>Identificacion</th>
               <th>Banco</th>
-              <th>Nombres</th>
-              <th>Apellidos</th>
+              <th>Estado Transaccion</th>
+              <th>Fecha Respuesta</th>
               <th>Acción</th>
             </tr>
           </thead>
           <tbody>
-            {tableData.map((row, index) => (
+          {tableData.map((row, index) => {
+            return (
               <tr key={index}>
                 <td>
                   <input
                     type="text"
-                    id="nameDefendant"
                     name="nameDefendant"
-                    value={row.nameDefendant}
-                    onChange={(e) => handleTableInputChange(index, e)}
+                    value={row.nameDefendant || ''} 
+                    onChange={(event) => handleTableInputChange(index, event)}
                   />
                 </td>
                 <td>
                   <input
                     type="text"
-                    id="lastnameDefendant"
                     name="lastnameDefendant"
-                    value={row.lastnameDefendant}
-                    onChange={(e) => handleTableInputChange(index, e)}
+                    value={row.lastnameDefendant || ''}
+                    onChange={(event) => handleTableInputChange(index, event)}
                   />
                 </td>
                 <td>
                   <select
-                    id="identificationTypeDefendant"
                     name="identificationTypeDefendant"
-                    value={row.identificationTypeDefendant}
-                    onChange={(e) => handleTableInputChange(index, e)}
+                    value={row.identificationTypeDefendant || ''}
+                    onChange={(event) => handleTableInputChange(index, event)}
                   >
                     <option value="">Seleccione...</option>
                     <option value="cedula">Cédula</option>
@@ -400,27 +431,24 @@ const SeizureOrderComponent = () => {
                 <td>
                   <input
                     type="text"
-                    id="identificationDefendant"
                     name="identificationDefendant"
-                    value={row.identificationDefendant}
-                    onChange={(e) => handleTableInputChange(index, e)}
+                    value={row.identificationDefendant || ''}
+                    onChange={(event) => handleTableInputChange(index, event)}
                   />
                 </td>
                 <td>
                   <input
                     type="text"
-                    id="numOffice"
                     name="numOffice"
-                    value={row.numOffice}
-                    onChange={(e) => handleTableInputChange(index, e)}
+                    value={numOffice || ''}
+                    onChange={(event) => handleTableInputChange(index, event)}
                   />
                 </td>
                 <td>
                   <input
-                    type="text"
                     id="amount"
                     name="amount"
-                    value={row.amount}
+                    value={row.amount || ''}
                     onChange={(e) => handleTableInputChange(index, e)}
                   />
                 </td>
@@ -431,7 +459,7 @@ const SeizureOrderComponent = () => {
                     value={row.bankDefendant || ''}
                     onChange={(e) => handleTableInputChange(index, e)}
                   >
-                    <option value="">Seleccione...</option>
+                    <option value="">{row.bankDefendant || ''}</option>
                     {bankOptions.map((bank, idx) => (
                       <option key={idx} value={bank}>
                         {bank}
@@ -443,10 +471,10 @@ const SeizureOrderComponent = () => {
                   <select
                     id="accountTypeDefendant"
                     name="accountTypeDefendant"
-                    value={row.accountTypeDefendant}
+                    value={row.accountTypeDefendant || ''}
                     onChange={(e) => handleTableInputChange(index, e)}
                   >
-                    <option value="">Seleccione...</option>
+                    <option value="">{row.accountTypeDefendant || ''}</option>
                     <option value="ahorros">Ahorros</option>
                     <option value="corriente">Corriente</option>
                   </select>
@@ -456,7 +484,25 @@ const SeizureOrderComponent = () => {
                     type="text"
                     id="accountNumDefendant"
                     name="accountNumDefendant"
-                    value={row.accountNumDefendant}
+                    value={row.accountNumDefendant || ''}
+                    onChange={(e) => handleTableInputChange(index, e)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    id="nameBeneficiary"
+                    name="nameBeneficiary"
+                    value={row.nameBeneficiary || ''}
+                    onChange={(e) => handleTableInputChange(index, e)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    id="lastnameBeneficiary"
+                    name="lastnameBeneficiary"
+                    value={row.lastnameBeneficiary || ''}
                     onChange={(e) => handleTableInputChange(index, e)}
                   />
                 </td>
@@ -464,10 +510,10 @@ const SeizureOrderComponent = () => {
                   <select
                     id="accountTypeBeneficiary"
                     name="accountTypeBeneficiary"
-                    value={row.accountTypeBeneficiary}
+                    value={row.accountTypeBeneficiary || ''}
                     onChange={(e) => handleTableInputChange(index, e)}
                   >
-                    <option value="">Seleccione...</option>
+                    <option value="">{row.accountTypeBeneficiary || ''}</option>
                     <option value="ahorros">Ahorros</option>
                     <option value="corriente">Corriente</option>
                   </select>
@@ -477,7 +523,7 @@ const SeizureOrderComponent = () => {
                     type="text"
                     id="accountNumBeneficiary"
                     name="accountNumBeneficiary"
-                    value={row.accountNumBeneficiary}
+                    value={row.accountNumBeneficiary || ''}
                     onChange={(e) => handleTableInputChange(index, e)}
                   />
                 </td>
@@ -485,7 +531,7 @@ const SeizureOrderComponent = () => {
                   <select
                     id="identificationTypeBeneficiary"
                     name="identificationTypeBeneficiary"
-                    value={row.identificationTypeBeneficiary}
+                    value={row.identificationTypeBeneficiary || ''}
                     onChange={(e) => handleTableInputChange(index, e)}
                   >
                     <option value="">Seleccione...</option>
@@ -499,7 +545,7 @@ const SeizureOrderComponent = () => {
                     type="text"
                     id="identificationBeneficiary"
                     name="identificationBeneficiary"
-                    value={row.identificationBeneficiary}
+                    value={row.identificationBeneficiary || ''}
                     onChange={(e) => handleTableInputChange(index, e)}
                   />
                 </td>
@@ -510,7 +556,7 @@ const SeizureOrderComponent = () => {
                     value={row.bankBeneficiary || ''}
                     onChange={(e) => handleTableInputChange(index, e)}
                   >
-                    <option value="">Seleccione...</option>
+                    <option value="">{row.bankBeneficiary || ''}</option>
                     {bankOptions.map((bank, idx) => (
                       <option key={idx} value={bank}>
                         {bank}
@@ -521,28 +567,29 @@ const SeizureOrderComponent = () => {
                 <td>
                   <input
                     type="text"
-                    id="nameBeneficiary"
-                    name="nameBeneficiary"
-                    value={row.nameBeneficiary}
+                    id="transactionStatus"
+                    name="transactionStatus"
+                    value={row.transactionStatus || ''}
                     onChange={(e) => handleTableInputChange(index, e)}
                   />
                 </td>
                 <td>
                   <input
                     type="text"
-                    id="lastnameBeneficiary"
-                    name="lastnameBeneficiary"
-                    value={row.lastnameBeneficiary}
+                    id="responseDate"
+                    name="responseDate"
+                    value={row.responseDate || ''}
                     onChange={(e) => handleTableInputChange(index, e)}
                   />
                 </td>
                 <td>
-                  <IconButton color="secondary" onClick={() => deleteRow(index)}>
+                  <IconButton onClick={() => deleteRow(index)}>
                     <DeleteIcon />
                   </IconButton>
                 </td>
               </tr>
-            ))}
+            );
+          })}
           </tbody>
         </table>
         <div className="table-actions" style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
@@ -562,4 +609,4 @@ const SeizureOrderComponent = () => {
   );
 };
 
-export default SeizureOrderComponent;
+export default EditSeizureOrderComponent;
