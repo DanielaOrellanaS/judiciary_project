@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../../components.css';
 import { getBankResponse, getOrders } from '../../Api';
+import { Button } from '@mui/material';
 
 const RequireDataTableComponent = () => {
   const location = useLocation();
@@ -11,6 +12,10 @@ const RequireDataTableComponent = () => {
 
   const [combinedData, setCombinedData] = useState([]);
   const [isLoading, setIsLoading] = useState(true); 
+
+  const handleCancel = () => {
+    navigate(-1); 
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,36 +50,41 @@ const RequireDataTableComponent = () => {
 
   const renderTable = () => {
     return (
-      <table className="transaction-table">
-        <thead>
-          <tr>
-            <th>Fecha</th>
-            <th>Num. Oficio</th>
-            <th>Nombres</th>
-            <th>Apellidos</th>
-            <th>Cédula</th>
-            <th>Estado</th>
-            <th>Editar</th>
-          </tr>
-        </thead>
-        <tbody>
-          {combinedData.map(item => (
-            <tr key={item.idOrders}>
-              <td>{new Date(item.responseDate).toLocaleDateString()}</td>
-              <td>{item.numOffice}</td>
-              <td>{item.nameDefendant}</td>
-              <td>{item.lastnameDefendant}</td>
-              <td>{item.identificationDefendant}</td>
-              <td>{item.transactionStatus}</td>
-              <td>
-                <button onClick={() => navigate('/edit-require-data', { state: { idJudgment: item.idJudgment, numJudgment: numJudgment } })}>
-                  Editar
-                </button>
-              </td>
+      <div>
+        <table className="transaction-table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Num. Oficio</th>
+              <th>Nombres</th>
+              <th>Apellidos</th>
+              <th>Cédula</th>
+              <th>Estado</th>
+              <th>Editar</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {combinedData.map(item => (
+              <tr key={item.idOrders}>
+                <td>{new Date(item.responseDate).toLocaleDateString()}</td>
+                <td>{item.numOffice}</td>
+                <td>{item.nameDefendant}</td>
+                <td>{item.lastnameDefendant}</td>
+                <td>{item.identificationDefendant}</td>
+                <td>{item.transactionStatus}</td>
+                <td>
+                  <button onClick={() => navigate('/edit-require-data', { state: { idJudgment: item.idJudgment, numJudgment: numJudgment } })}>
+                    Editar
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <Button variant="contained" style={{ backgroundColor: 'green', color: 'white', fontSize: '0.7rem', marginRight: '1rem', marginTop: '1rem' }} onClick={handleCancel}>
+            Regresar
+        </Button>
+      </div>
     );
   };  
 

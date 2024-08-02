@@ -14,12 +14,15 @@ const EditRequireDataComponent = () => {
   const orderType = 'RequireData';
   const navigate = useNavigate();
 
-  const getCurrentDate = () => {
-    const date = new Date();
-    return date.toISOString().split('T')[0];
+  const numOffice = "UJC-24790-2024-517";
+
+  const handleCancel = () => {
+    navigate(-1); 
   };
 
-  const numOffice = "UJC-24790-2024-517";
+  const formatDate = (isoString) => {
+    return isoString.split('T')[0];
+  };
 
   function getRandomStatus() {
     const statuses = ['Pendiente', 'OK', 'ERROR'];
@@ -42,7 +45,7 @@ const EditRequireDataComponent = () => {
     lastname: '', 
     identificationType: '',
     identification: '',
-    date: getCurrentDate() || ''
+    date: ''
   });
 
   const [tableData, setTableData] = useState([
@@ -66,8 +69,8 @@ const EditRequireDataComponent = () => {
     const fetchJudgmentData = async () => {
       try {
         const data = await getJudgmentById(idJudgment);
+        console.log("DATOS FILTRADOS: ", data)
         const tableData = await getOrdersByJudgmentIdAndOrderType(idJudgment, orderType); 
-        console.log("DATOS FILTRADOS: ", tableData)
         const randomResponse = await getBankResponse().then(allResponses => getBankResponseById(getRandomId(allResponses.map(response => response.id))));
         setFormData({
           judge: data.judge || '',
@@ -79,7 +82,7 @@ const EditRequireDataComponent = () => {
           lastname: data.lastname || '',
           identificationType: data.identificationType || '',
           identification: data.identification || '',
-          date: data.date || getCurrentDate(),
+          date: data.date || '',
         });
 
         setTableData(tableData.map(item => ({
@@ -333,7 +336,7 @@ const EditRequireDataComponent = () => {
             type="date"
             id="fecha"
             name="fecha"
-            value={formData.date}
+            value={formatDate(formData.date)}
             readOnly
           />
         </div>
@@ -459,10 +462,17 @@ const EditRequireDataComponent = () => {
           </tbody>
         </table>
         <div className="table-actions">
-          <div className="table-actions" style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>  
-            <Button type="submit" variant="contained" style={{ backgroundColor: 'green', color: 'white', fontSize: '0.7rem' }}>  
-                Actualizar Datos  
-            </Button>  
+        <div className="table-actions" style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
+          <Button 
+            type="submit" 
+            variant="contained" 
+            style={{ backgroundColor: 'green', color: 'white', fontSize: '0.7rem', marginRight: '1rem' }}
+          >
+            Guardar Datos
+          </Button>
+          <Button variant="contained" style={{ backgroundColor: 'green', color: 'white', fontSize: '0.7rem', marginRight: '1rem' }} onClick={handleCancel}>
+              Cancelar
+          </Button>
         </div>
         </div>
       </form>

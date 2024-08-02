@@ -22,6 +22,10 @@ const RequireDataComponent = () => {
 
   const numOffice = "UJC-24790-2024-517";
 
+  const handleCancel = () => {
+    navigate(-1); 
+  };
+
   function getRandomStatus() {
     const statuses = ['Pendiente', 'OK', 'ERROR'];
     const randomIndex = Math.floor(Math.random() * statuses.length);
@@ -84,13 +88,13 @@ const RequireDataComponent = () => {
   };
 
   const handleTableSubmit = async () => {
-    const judgmentData = await getJudgment();
-  
-    const lastJudgmentId = judgmentData.reduce((maxId, judgment) => {
-      return judgment.idJudgment > maxId ? judgment.idJudgment : maxId;
-    }, 0);
-  
     try {
+      const judgmentData = await getJudgment();
+  
+      const lastJudgmentId = judgmentData.reduce((maxId, judgment) => {
+        return judgment.idJudgment > maxId ? judgment.idJudgment : maxId;
+      }, 0);
+  
       for (const item of tableData) {
         const updatedItem = {
           orderType: orderType || '',
@@ -103,28 +107,18 @@ const RequireDataComponent = () => {
           idJudgment: lastJudgmentId,
         };
   
-        console.log("DATA ENVIADA DESDE SAVE ORDERS: ", JSON.stringify(updatedItem));
-  
         const response = await saveOrders(updatedItem);
   
-        if (response && response.ok) {
-          console.log("Order saved successfully:", response);
-        } else {
-          const errorData = await response.json();
-          console.error("RESPONSE ERROR DATA: ", errorData);
-          console.log("LLEVANDO EL DATO: ", numJudgment)
-          throw new Error(errorData.detail || 'Failed to save orders data');
-        }
+        console.log("Order saved successfully:", response);
       }
   
       alert('Datos de la tabla guardados correctamente.');
       return true;
     } catch (error) {
-      console.error('Error al guardar los datos de la tabla:', error);
-      alert('Error al guardar los datos de la tabla: ' + error.message);
+      console.log('Error: ', error)
       return false;
     }
-  };
+  };  
 
   const handleSubmit = async (event) => {
     if (event) {
@@ -360,10 +354,17 @@ const RequireDataComponent = () => {
             ))}
           </tbody>
         </table>
-        <div className="table-actions" style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>  
-            <Button type="submit" variant="contained" style={{ backgroundColor: 'green', color: 'white', fontSize: '0.7rem' }}>  
-                Guardar Datos  
-            </Button>  
+        <div className="table-actions" style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
+          <Button 
+            type="submit" 
+            variant="contained" 
+            style={{ backgroundColor: 'green', color: 'white', fontSize: '0.7rem', marginRight: '1rem' }}
+          >
+            Guardar Datos
+          </Button>
+          <Button variant="contained" style={{ backgroundColor: 'green', color: 'white', fontSize: '0.7rem', marginRight: '1rem' }} onClick={handleCancel}>
+              Cancelar
+          </Button>
         </div>
       </form>
     </div>
