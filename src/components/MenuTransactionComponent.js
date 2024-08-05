@@ -2,7 +2,7 @@ import React from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import '../components.css';
 
-const MenuTransactionComponent = () => {
+const   MenuTransactionComponent = () => {
   const location = useLocation();
   const { numJudgment } = location.state || {};
 
