@@ -185,30 +185,35 @@ const EditRetentionOrderComponent = () => {
 
   const handleSubmit = async (event) => {
     if (event) {
-      event.preventDefault();
+      event.preventDefault(); 
     }
-
+  
+    const confirmed = window.confirm('¿Estás seguro de que deseas guardar los datos?');
+    if (!confirmed) {
+      navigate(-1);
+      return;
+    }
+  
     try {
       const isFormSaved = await handleFormSubmit();
-
+      
       if (isFormSaved) {
         const isTableSaved = await handleTableSubmit();
-
+        
         if (isTableSaved) {
           alert('Todos los datos se han guardado correctamente.');
-          navigate('/transaccion');
+          navigate('/transaccion', { state: { numJudgment } });
         } else {
           alert('Error al guardar los datos de la tabla.');
-          navigate('/transaccion');
+          navigate('/transaccion', { state: { numJudgment } });
         }
       } else {
         alert('Error al guardar los datos del formulario.');
-        navigate('/transaccion');
+        navigate('/transaccion', { state: { numJudgment } });
       }
     } catch (error) {
       console.error('Error en handleSubmit:', error);
       alert('Ocurrió un error inesperado.');
-      navigate('/transaccion');
     }
   };
 
