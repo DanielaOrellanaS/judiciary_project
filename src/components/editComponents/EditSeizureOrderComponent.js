@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import '../../components.css';
 import { getJudgmentById, updateJudgment, getOrdersSeizureByJudgmentIdAndOrderType, getBankResponse, getBankResponseById, getJudgment, updateOrdersSeizure } from '../../Api';
 import { useLocation } from 'react-router-dom';
-import { IconButton } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import bankOptions from '../../bankOptions';
+import { FormControl, IconButton, InputLabel, MenuItem, Select } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
-import { useNavigate } from 'react-router-dom';
-import bankOptions from '../../bankOptions';
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
 
 const EditSeizureOrderComponent = () => {
   const location = useLocation();
@@ -235,124 +238,155 @@ const EditSeizureOrderComponent = () => {
   return (
     <div className="transaction-container">
       <form className="transaction-form" onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="adjudicated">Juzgado:</label>
-          <input
-            type="text"
-            id="adjudicated"
-            name="adjudicated"
-            value={formData.adjudicated}
-            onChange={handleFormInputChange}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="judge">Juez:</label>
-          <input
-            type="text"
-            id="judge"
-            name="judge"
-            value={formData.judge}
-            onChange={handleFormInputChange}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="oficio">Oficio No:</label>
-          <input
-            type="text"
-            id="oficio"
-            name="oficio"
-            value={numOffice}
-            readOnly
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="mailOrderer">Mail:</label>
-          <input
-            type="text"
-            id="mailOrderer"
-            name="mailOrderer"
-            value={formData.mailOrderer}
-            onChange={handleFormInputChange}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="positionOrderer">Cargo:</label>
-          <input
-            type="text"
-            id="positionOrderer"
-            name="positionOrderer"
-            value={formData.positionOrderer}
-            onChange={handleFormInputChange}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="numJudgment">Juicio:</label>
-          <input
-            type="text"
-            id="numJudgment"
-            name="numJudgment"
-            value={formData.numJudgment}
-            onChange={handleFormInputChange}
-            readOnly
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="name">Datos accionado:</label>
-          <div className="input-group">
-            <input
-              type="text"
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="Juzgado"
+                id="adjudicated"
+                name="adjudicated"
+                value={formData.adjudicated}
+                onChange={handleFormInputChange}
+                variant="outlined"
+                margin="normal"
+              />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="Juez"
+              id="judge"
+              name="judge"
+              value={formData.judge}
+              onChange={handleFormInputChange}
+              variant="outlined"
+              margin="normal"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="Oficio No"
+              id="oficio"
+              name="oficio"
+              value={numOffice}
+              InputProps={{
+                readOnly: true,
+              }}
+              variant="outlined"
+              margin="normal"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="Mail"
+              id="mailOrderer"
+              name="mailOrderer"
+              value={formData.mailOrderer}
+              onChange={handleFormInputChange}
+              variant="outlined"
+              margin="normal"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="Cargo"
+              id="positionOrderer"
+              name="positionOrderer"
+              value={formData.positionOrderer}
+              onChange={handleFormInputChange}
+              variant="outlined"
+              margin="normal"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="Juicio"
+              id="numJudgment"
+              name="numJudgment"
+              value={formData.numJudgment}
+              InputProps={{
+                readOnly: true,
+              }}
+              variant="outlined"
+              margin="normal"
+            />
+          </Grid>
+          <Grid item xs={12}>
+          <label htmlFor="name" className="form-label">Datos accionado:</label>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="Nombres"
               id="name"
               name="name"
               value={formData.name}
               onChange={handleFormInputChange}
-              placeholder="Nombres"
+              variant="outlined"
+              margin="normal"
             />
-            <div>
-              <input
-                type="text"
-                id="lastname"
-                name="lastname"
-                value={formData.lastname}
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="Apellidos"
+              id="lastname"
+              name="lastname"
+              value={formData.lastname}
+              onChange={handleFormInputChange}
+              variant="outlined"
+              margin="normal"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <FormControl fullWidth variant="outlined" margin="normal">
+              <InputLabel id="identificationType-label">Tipo Identificación</InputLabel>
+              <Select
+                labelId="identificationType-label"
+                id="identificationType"
+                name="identificationType"
+                value={formData.identificationType}
                 onChange={handleFormInputChange}
-                placeholder="Apellidos"
+                label="Tipo Identificación"
+              >
+                <MenuItem value="">
+                  <em>Seleccione...</em>
+                </MenuItem>
+                <MenuItem value="cedula">Cédula</MenuItem>
+                <MenuItem value="pasaporte">Pasaporte</MenuItem>
+                <MenuItem value="ruc">RUC</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="Identificacion"
+                id="identification"
+                name="identification"
+                value={formData.identification}
+                onChange={handleFormInputChange}
+                variant="outlined"
+                margin="normal"
               />
-            </div>
-          </div>
-        </div>
-        <div className="form-group">
-          <label htmlFor="identificationType">Tipo Identificación:</label>
-          <select
-            id="identificationType"
-            name="identificationType"
-            value={formData.identificationType}
-            onChange={handleFormInputChange}
-          >
-            <option value="">Seleccione...</option>
-            <option value="cedula">Cédula</option>
-            <option value="pasaporte">Pasaporte</option>
-            <option value="ruc">RUC</option>
-          </select>
-        </div>
-        <div className="form-group">
-          <label htmlFor="identification">Identificacion Demandante:</label>
-          <input
-            type="text"
-            id="identification"
-            name="identification"
-            value={formData.identification}
-            onChange={handleFormInputChange}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="date">Fecha:</label>
-          <input
-            type="date"
-            id="date"
-            name="date"
-            value={formatDate(formData.date)}
-            readOnly
-          />
-        </div>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="Fecha"
+              id="date"
+              name="date"
+              value={formData.date}
+              onChange={handleFormInputChange}
+              variant="outlined"
+              margin="normal"
+            />
+          </Grid>
+        </Grid>
       <div className="table-header" style={{ display: 'flex', alignItems: 'center' }}>   
           <IconButton  
               color="primary"  
@@ -363,238 +397,335 @@ const EditSeizureOrderComponent = () => {
           </IconButton>  
           <h2 style={{ margin: 15 }}>Cuentas Ahorros-Corrientes</h2> 
       </div>
-        <table className="transaction-table">
-          <thead>
-            <tr>
-            <th>Nombres</th>
-              <th>Apellidos</th>
-              <th>Tipo identificación</th>
-              <th>Identificación</th>
-              <th>Num Oficio</th>
-              <th>Monto</th>
-              <th>Banco</th>
-              <th>Tipo Cuenta</th>
-              <th>Num Cuenta</th>
-              <th>Nombres Benef</th>
-              <th>Apellidos</th>
-              <th>Tipo Cuenta Benef</th>
-              <th>Num Cuenta</th>
-              <th>Tipo Identification</th>
-              <th>Identificacion</th>
-              <th>Banco</th>
-              <th>Estado Transaccion</th>
-              <th>Fecha Respuesta</th>
-              <th>Acción</th>
-            </tr>
-          </thead>
-          <tbody>
-          {tableData.map((row, index) => {
-            return (
-              <tr key={index}>
-                <td>
-                  <input
-                    type="text"
-                    name="nameDefendant"
-                    value={row.nameDefendant || ''} 
-                    onChange={(event) => handleTableInputChange(index, event)}
-                  />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    name="lastnameDefendant"
-                    value={row.lastnameDefendant || ''}
-                    onChange={(event) => handleTableInputChange(index, event)}
-                  />
-                </td>
-                <td>
-                  <select
-                    name="identificationTypeDefendant"
-                    value={row.identificationTypeDefendant || ''}
-                    onChange={(event) => handleTableInputChange(index, event)}
-                  >
-                    <option value="">Seleccione...</option>
-                    <option value="cedula">Cédula</option>
-                    <option value="pasaporte">Pasaporte</option>
-                    <option value="ruc">RUC</option>
-                  </select>
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    name="identificationDefendant"
-                    value={row.identificationDefendant || ''}
-                    onChange={(event) => handleTableInputChange(index, event)}
-                  />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    name="numOffice"
-                    value={numOffice || ''}
-                    onChange={(event) => handleTableInputChange(index, event)}
-                  />
-                </td>
-                <td>
-                  <input
-                    id="amount"
-                    name="amount"
-                    value={row.amount || ''}
-                    onChange={(e) => handleTableInputChange(index, e)}
-                  />
-                </td>
-                <td>
-                  <select
-                    id="bankDefendant"
-                    name="bankDefendant"
-                    value={row.bankDefendant || ''}
-                    onChange={(e) => handleTableInputChange(index, e)}
-                  >
-                    <option value="">{row.bankDefendant || ''}</option>
-                    {bankOptions.map((bank, idx) => (
-                      <option key={idx} value={bank}>
-                        {bank}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-                <td>
-                  <select
-                    id="accountTypeDefendant"
-                    name="accountTypeDefendant"
-                    value={row.accountTypeDefendant || ''}
-                    onChange={(e) => handleTableInputChange(index, e)}
-                  >
-                    <option value="">{row.accountTypeDefendant || ''}</option>
-                    <option value="ahorros">Ahorros</option>
-                    <option value="corriente">Corriente</option>
-                  </select>
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    id="accountNumDefendant"
-                    name="accountNumDefendant"
-                    value={row.accountNumDefendant || ''}
-                    onChange={(e) => handleTableInputChange(index, e)}
-                  />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    id="nameBeneficiary"
-                    name="nameBeneficiary"
-                    value={row.nameBeneficiary || ''}
-                    onChange={(e) => handleTableInputChange(index, e)}
-                  />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    id="lastnameBeneficiary"
-                    name="lastnameBeneficiary"
-                    value={row.lastnameBeneficiary || ''}
-                    onChange={(e) => handleTableInputChange(index, e)}
-                  />
-                </td>
-                <td>
-                  <select
-                    id="accountTypeBeneficiary"
-                    name="accountTypeBeneficiary"
-                    value={row.accountTypeBeneficiary || ''}
-                    onChange={(e) => handleTableInputChange(index, e)}
-                  >
-                    <option value="">{row.accountTypeBeneficiary || ''}</option>
-                    <option value="ahorros">Ahorros</option>
-                    <option value="corriente">Corriente</option>
-                  </select>
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    id="accountNumBeneficiary"
-                    name="accountNumBeneficiary"
-                    value={row.accountNumBeneficiary || ''}
-                    onChange={(e) => handleTableInputChange(index, e)}
-                  />
-                </td>
-                <td>
-                  <select
-                    id="identificationTypeBeneficiary"
-                    name="identificationTypeBeneficiary"
-                    value={row.identificationTypeBeneficiary || ''}
-                    onChange={(e) => handleTableInputChange(index, e)}
-                  >
-                    <option value="">Seleccione...</option>
-                    <option value="cedula">Cédula</option>
-                    <option value="pasaporte">Pasaporte</option>
-                    <option value="ruc">RUC</option>
-                  </select>
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    id="identificationBeneficiary"
-                    name="identificationBeneficiary"
-                    value={row.identificationBeneficiary || ''}
-                    onChange={(e) => handleTableInputChange(index, e)}
-                  />
-                </td>
-                <td>
-                  <select
-                    id="bankBeneficiary"
-                    name="bankBeneficiary"
-                    value={row.bankBeneficiary || ''}
-                    onChange={(e) => handleTableInputChange(index, e)}
-                  >
-                    <option value="">{row.bankBeneficiary || ''}</option>
-                    {bankOptions.map((bank, idx) => (
-                      <option key={idx} value={bank}>
-                        {bank}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    id="transactionStatus"
-                    name="transactionStatus"
-                    value={row.transactionStatus || ''}
-                    onChange={(e) => handleTableInputChange(index, e)}
-                  />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    id="responseDate"
-                    name="responseDate"
-                    value={row.responseDate || ''}
-                    onChange={(e) => handleTableInputChange(index, e)}
-                  />
-                </td>
-                <td>
-                  <IconButton onClick={() => deleteRow(index)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </td>
-              </tr>
-            );
-          })}
-          </tbody>
-        </table>
-        <div className="table-actions" style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
-          <Button 
-            type="submit" 
-            variant="contained" 
-            style={{ backgroundColor: '#191e3b', color: 'white', fontSize: '0.7rem', marginRight: '1rem' }}
-          >
-            Guardar Datos
-          </Button>
-          <Button variant="contained" style={{ backgroundColor: '#191e3b', color: 'white', fontSize: '0.7rem', marginRight: '1rem' }} onClick={handleCancel}>
-              Cancelar
-          </Button>
-        </div>
+      <TableContainer component={Paper} className="transaction-table-container">
+        <Table className="transaction-table" aria-label="transaction table">
+        <TableHead>
+              <TableRow>
+                <TableCell>Nombres</TableCell>
+                <TableCell>Apellidos</TableCell>
+                <TableCell>Tipo identificación</TableCell>
+                <TableCell>Identificación</TableCell>
+                <TableCell>Num Oficio</TableCell>
+                <TableCell>Monto</TableCell>
+                <TableCell>Banco</TableCell>
+                <TableCell>Tipo Cuenta</TableCell>
+                <TableCell>Num Cuenta</TableCell>
+                <TableCell>Tipo Cuenta Benef</TableCell>
+                <TableCell>Num Cuenta</TableCell>
+                <TableCell>Tipo Identification</TableCell>
+                <TableCell>Identificacion</TableCell>
+                <TableCell>Banco</TableCell>
+                <TableCell>Nombres</TableCell>
+                <TableCell>Apellidos</TableCell>
+                <TableCell>Estado Transaccion</TableCell>
+                <TableCell>Fecha Respuesta</TableCell>
+                <TableCell>Acción</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {tableData.map((row, index) => (
+                <TableRow key={index}>
+                  <TableCell>
+                    <TextField
+                      fullWidth
+                      id="nameDefendant"
+                      name="nameDefendant"
+                      value={row.nameDefendant || ''} 
+                      onChange={(e) => handleTableInputChange(index, e)}
+                      variant="outlined"
+                      margin="dense"
+                      InputProps={{
+                        disableUnderline: true,
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <TextField
+                      fullWidth
+                      id="lastnameDefendant"
+                      name="lastnameDefendant"
+                      value={row.lastnameDefendant || ''}
+                      onChange={(e) => handleTableInputChange(index, e)}
+                      variant="outlined"
+                      margin="dense"
+                      InputProps={{
+                        disableUnderline: true,
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Select
+                      fullWidth
+                      id="identificationTypeDefendant"
+                      name="identificationTypeDefendant"
+                      value={row.identificationTypeDefendant || ''}
+                      onChange={(e) => handleTableInputChange(index, e)}
+                      variant="outlined"
+                      margin="dense"
+                    >
+                      <MenuItem value="">
+                        <em>Seleccione...</em>
+                      </MenuItem>
+                      <MenuItem value="cedula">Cédula</MenuItem>
+                      <MenuItem value="pasaporte">Pasaporte</MenuItem>
+                      <MenuItem value="ruc">RUC</MenuItem>
+                    </Select>
+                    </TableCell>
+                    <TableCell>
+                      <TextField
+                        fullWidth
+                        id="identificationDefendant"
+                        name="identificationDefendant"
+                        value={row.identificationDefendant || ''}
+                        onChange={(e) => handleTableInputChange(index, e)}
+                        variant="outlined"
+                        margin="dense"
+                        InputProps={{
+                          disableUnderline: true,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <TextField
+                        fullWidth
+                        id="numOffice"
+                        name="numOffice"
+                        value={row.numOffice || ''}
+                        onChange={(e) => handleTableInputChange(index, e)}
+                        variant="outlined"
+                        margin="dense"
+                        InputProps={{
+                          disableUnderline: true,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <TextField
+                        fullWidth
+                        id="amount"
+                        name="amount"
+                        value={row.amount || ''}
+                        onChange={(e) => handleTableInputChange(index, e)}
+                        variant="outlined"
+                        margin="dense"
+                        InputProps={{
+                          disableUnderline: true,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Select
+                        fullWidth
+                        id="bankDefendant"
+                        name="bankDefendant"
+                        value={row.bankDefendant || ''}
+                        onChange={(e) => handleTableInputChange(index, e)}
+                        variant="outlined"
+                        margin="dense"
+                      >
+                        <MenuItem value="">
+                          <em>Seleccione...</em>
+                        </MenuItem>
+                        {bankOptions.map((bank, idx) => (
+                          <MenuItem key={idx} value={bank}>
+                            {bank}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </TableCell>
+                    <TableCell>
+                      <Select
+                        fullWidth
+                        id="accountTypeDefendant"
+                        name="accountTypeDefendant"
+                        value={row.accountTypeDefendant}
+                        onChange={(e) => handleTableInputChange(index, e)}
+                        variant="outlined"
+                        margin="dense"
+                      >
+                        <MenuItem value="">
+                          <em>Seleccione...</em>
+                        </MenuItem>
+                        <MenuItem value="ahorros">Ahorros</MenuItem>
+                        <MenuItem value="corriente">Corriente</MenuItem>
+                      </Select>
+                    </TableCell>
+                    <TableCell>
+                      <TextField
+                        fullWidth
+                        id="accountNumDefendant"
+                        name="accountNumDefendant"
+                        value={row.accountNumDefendant}
+                        onChange={(e) => handleTableInputChange(index, e)}
+                        variant="outlined"
+                        margin="dense"
+                        InputProps={{
+                          disableUnderline: true,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Select
+                        fullWidth
+                        id="accountTypeBeneficiary"
+                        name="accountTypeBeneficiary"
+                        value={row.accountTypeBeneficiary}
+                        onChange={(e) => handleTableInputChange(index, e)}
+                        variant="outlined"
+                        margin="dense"
+                      >
+                        <MenuItem value="">
+                          <em>Seleccione...</em>
+                        </MenuItem>
+                        <MenuItem value="ahorros">Ahorros</MenuItem>
+                        <MenuItem value="corriente">Corriente</MenuItem>
+                      </Select>
+                    </TableCell>
+                    <TableCell>
+                      <TextField
+                        fullWidth
+                        id="accountNumBeneficiary"
+                        name="accountNumBeneficiary"
+                        value={row.accountNumBeneficiary}
+                        onChange={(e) => handleTableInputChange(index, e)}
+                        variant="outlined"
+                        margin="dense"
+                        InputProps={{
+                          disableUnderline: true,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                    <Select
+                      fullWidth
+                      id="identificationTypeBeneficiary"
+                      name="identificationTypeBeneficiary"
+                      value={row.identificationTypeBeneficiary}
+                      onChange={(e) => handleTableInputChange(index, e)}
+                      variant="outlined"
+                      margin="dense"
+                    >
+                      <MenuItem value="">
+                        <em>Seleccione...</em>
+                      </MenuItem>
+                      <MenuItem value="cedula">Cédula</MenuItem>
+                      <MenuItem value="pasaporte">Pasaporte</MenuItem>
+                      <MenuItem value="ruc">RUC</MenuItem>
+                    </Select>
+                  </TableCell>
+                  <TableCell>
+                    <TextField
+                      fullWidth
+                      id="identificationBeneficiary"
+                      name="identificationBeneficiary"
+                      value={row.identificationBeneficiary}
+                      onChange={(e) => handleTableInputChange(index, e)}
+                      variant="outlined"
+                      margin="dense"
+                      InputProps={{
+                        disableUnderline: true,
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>
+                  {console.log('BENEFICIARIO:', row.accountTypeBeneficiary)}
+                    <Select
+                      fullWidth
+                      id="bankBeneficiary"
+                      name="bankBeneficiary"
+                      value={row.bankBeneficiary || ''}
+                      onChange={(e) => handleTableInputChange(index, e)}
+                      variant="outlined"
+                      margin="dense"
+                    >
+                      <MenuItem value="">
+                        <em>Seleccione...</em>
+                      </MenuItem>
+                      {bankOptions.map((bank, idx) => (
+                        <MenuItem key={idx} value={bank}>
+                          {bank}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </TableCell>
+                  <TableCell>
+                    <TextField
+                      fullWidth
+                      id="nameBeneficiary"
+                      name="nameBeneficiary"
+                      value={row.nameBeneficiary}
+                      onChange={(e) => handleTableInputChange(index, e)}
+                      variant="outlined"
+                      margin="dense"
+                      InputProps={{
+                        disableUnderline: true,
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <TextField
+                      fullWidth
+                      id="lastnameBeneficiary"
+                      name="lastnameBeneficiary"
+                      value={row.lastnameBeneficiary}
+                      onChange={(e) => handleTableInputChange(index, e)}
+                      variant="outlined"
+                      margin="dense"
+                      InputProps={{
+                        disableUnderline: true,
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <TextField
+                      fullWidth
+                      id="transactionStatus"
+                      name="transactionStatus"
+                      value={row.transactionStatus}
+                      onChange={(e) => handleTableInputChange(index, e)}
+                      variant="outlined"
+                      margin="dense"
+                      InputProps={{
+                        disableUnderline: true,
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <TextField
+                      fullWidth
+                      id="responseDate"
+                      name="responseDate"
+                      value={row.responseDate}
+                      onChange={(e) => handleTableInputChange(index, e)}
+                      variant="outlined"
+                      margin="dense"
+                      InputProps={{
+                        disableUnderline: true,
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>
+                      <IconButton color="secondary" onClick={() => deleteRow(index)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+        </Table>
+      </TableContainer>
+      <div className="table-actions" style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
+        <Button 
+          type="submit" 
+          variant="contained" 
+          style={{ backgroundColor: '#191e3b', color: 'white', fontSize: '0.7rem', marginRight: '1rem' }}
+        >
+          Guardar Datos
+        </Button>
+        <Button variant="contained" style={{ backgroundColor: '#191e3b', color: 'white', fontSize: '0.7rem', marginRight: '1rem' }} onClick={handleCancel}>
+            Cancelar
+        </Button>
+      </div>
       </form>
     </div>
   );

@@ -131,7 +131,7 @@ const SeizureOrderComponent = () => {
           accountTypeDefendant: item.accountTypeDefendant || '',
           accountNumDefendant: parseFloat(item.accountNumDefendant) || 0,
           bankBeneficiary: item.bankBeneficiary || '',
-          accountTypeBeneficiary: item.bankBeneficiary || '',
+          accountTypeBeneficiary: item.accountTypeBeneficiary || '',
           accountNumBeneficiary: parseFloat(item.accountNumBeneficiary) || 0,
           identificationTypeBeneficiary: item.identificationTypeBeneficiary || '',
           identificationBeneficiary: item.identificationBeneficiary || '',
@@ -196,7 +196,7 @@ const SeizureOrderComponent = () => {
     <div className="transaction-container">
       <form className="transaction-form" onSubmit={handleSubmit}>
         <Grid container spacing={2}>
-        <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
               label="Juzgado"
