@@ -7,9 +7,9 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
-import { useNavigate } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
+import { useNavigate } from 'react-router-dom';
 
 const RequireDataComponent = () => {
   const location = useLocation();
@@ -323,7 +323,7 @@ const RequireDataComponent = () => {
           </IconButton>  
           <h2 style={{ margin: 15 }}>Cuentas Ahorros-Corrientes</h2> 
       </div>
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} className="transaction-table-container">
       <Table className="transaction-table" aria-label="transaction table">
         <TableHead>
           <TableRow>

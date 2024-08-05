@@ -32,9 +32,13 @@
 /* TransactionComponent */
 
 .transaction-container {
-  width: 100%;
+  max-width: 800px; 
+  margin: 0 auto;
   padding: 20px;
+  width: 100%;
+  box-sizing: border-box;
 }
+
 
 .transaction-form {
   display: flex;
@@ -69,21 +73,6 @@
   margin-top: 20px;
 }
 
-.transaction-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.transaction-table th, .transaction-table td {
-  border: 1px solid #ddd;
-  padding: 8px;
-}
-
-.transaction-table th {
-  background-color: #f2f2f2;
-  text-align: left;
-}
-
 /* ResumeTable */
 
 .resume-table-container {
@@ -101,21 +90,33 @@
   font-size: 1.2em; 
 }
 
+/* TransactionTable */
+
+.transaction-table-container {
+  overflow-x: auto;
+}
+
 .transaction-table {
   width: 100%;
   border-collapse: collapse;
 }
 
+.transaction-table th {
+  background-color: #f2f2f2;
+  text-align: left;
+}
+
+.transaction-table td {
+  min-width: 150px;
+}
+
 .transaction-table th,
 .transaction-table td {
-  padding: 8px;
+  padding: 10px;
   border: 1px solid #ddd;
   text-align: left;
   font-size: 0.9em; 
-}
-
-.transaction-table th {
-  background-color: #f4f4f4;
+  white-space: nowrap;
 }
 
 .transaction-table button {
