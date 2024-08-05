@@ -55,14 +55,14 @@
 .transaction-form button {
   padding: 10px;
   margin-top: 10px;
-  background-color: #4CAF50;
+  background-color: #191e3b;
   color: white;
   border: none;
   cursor: pointer;
 }
 
 .transaction-form button:hover {
-  background-color: #45a049;
+  background-color: #191e3b;
 }
 
 .table-header {
@@ -87,7 +87,7 @@
 /* ResumeTable */
 
 .resume-table-container {
-  font-size: 60%; /* Reduce el tamaño de la letra al 60% del tamaño original */
+  font-size: 60%; 
 }
 
 .header-container {
@@ -98,7 +98,7 @@
 }
 
 .resume-table-container h1 {
-  font-size: 1.2em; /* Ajusta el tamaño del título si es necesario */
+  font-size: 1.2em; 
 }
 
 .transaction-table {
@@ -111,7 +111,7 @@
   padding: 8px;
   border: 1px solid #ddd;
   text-align: left;
-  font-size: 0.9em; /* Ajusta el tamaño del texto en la tabla */
+  font-size: 0.9em; 
 }
 
 .transaction-table th {
@@ -119,7 +119,7 @@
 }
 
 .transaction-table button {
-  font-size: 0.9em; /* Ajusta el tamaño del texto en el botón */
+  font-size: 0.9em;
 }
 
 .button-container {
@@ -133,7 +133,7 @@
   font-size: 0.9em;
   padding: 10px 20px;
   border: none;
-  background-color: #4CAF50;
+  background-color: #191e3b;
   color: white;
   cursor: pointer;
   border-radius: 5px;
@@ -142,11 +142,11 @@
 
 .new-button:hover,
 .save-button:hover {
-  background-color: #45a049;
+  background-color: #191e3b;
 }
 
 .icon-button {
-  background-color: #4CAF50;
+  background-color: #2c304b;
   color: white;
   border-radius: 50%;
   padding: 10px;
@@ -156,11 +156,11 @@
 }
 
 .icon-button:hover {
-  background-color: #45a049;
+  background-color: #191e3b;
 }
 
 .submit-button {
-  background-color: #2aab2e;
+  background-color: #191e3b;
   color: white;
   padding: 10px;
   font-size: 12px;
@@ -168,10 +168,7 @@
   cursor: pointer;
 }
 
-.form-group {
-  margin-bottom: 20px;
-}
-
 .table-header {
   margin-top: 20px;
 }
+

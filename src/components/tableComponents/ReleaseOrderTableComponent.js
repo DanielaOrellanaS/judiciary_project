@@ -88,7 +88,7 @@ const ReleaseOrderTableComponent = () => {
             ))}
           </tbody>
         </table>
-        <Button variant="contained" style={{ backgroundColor: 'green', color: 'white', fontSize: '0.7rem', marginRight: '1rem', marginTop: '1rem' }} onClick={handleCancel}>
+        <Button variant="contained" style={{ backgroundColor: '#191e3b', color: 'white', fontSize: '0.7rem', marginRight: '1rem', marginTop: '1rem' }} onClick={handleCancel}>
             Regresar
         </Button>
       </div>

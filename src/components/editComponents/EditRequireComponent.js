@@ -335,7 +335,7 @@ const EditRequireDataComponent = () => {
           <IconButton  
               color="primary"  
               onClick={addNewRow}  
-              style={{ color: 'green', borderRadius: '50%', width: '15px', height: '15px' }}  
+              style={{ color: '#797d90', borderRadius: '50%', width: '15px', height: '15px' }}  
           >  
               <AddCircleIcon fontSize="large" />  
           </IconButton>  
@@ -457,11 +457,11 @@ const EditRequireDataComponent = () => {
           <Button 
             type="submit" 
             variant="contained" 
-            style={{ backgroundColor: 'green', color: 'white', fontSize: '0.7rem', marginRight: '1rem' }}
+            style={{ backgroundColor: '#191e3b', color: 'white', fontSize: '0.7rem', marginRight: '1rem' }}
           >
             Guardar Datos
           </Button>
-          <Button variant="contained" style={{ backgroundColor: 'green', color: 'white', fontSize: '0.7rem', marginRight: '1rem' }} onClick={handleCancel}>
+          <Button variant="contained" style={{ backgroundColor: '#191e3b', color: 'white', fontSize: '0.7rem', marginRight: '1rem' }} onClick={handleCancel}>
               Cancelar
           </Button>
         </div>
