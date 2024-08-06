@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../../components.css';
 import { getBankResponse, getOrders } from '../../Api';
-import { Button } from '@mui/material';
+import { Button, CircularProgress } from '@mui/material';
 
 const RequireDataTableComponent = () => {
   const location = useLocation();
@@ -73,17 +73,18 @@ const RequireDataTableComponent = () => {
                 <td>{item.identificationDefendant}</td>
                 <td>{item.transactionStatus}</td>
                 <td>
-                  <button onClick={() => navigate('/edit-require-data', { state: { idJudgment: item.idJudgment, numJudgment: numJudgment } })}>
+                  <Button
+                    variant="contained"
+                    style={{ backgroundColor: '#2c304b', color: 'white', fontSize: '0.6rem', marginRight: '1rem' }}
+                    onClick={() => navigate('/edit-require-data', { state: { idJudgment: item.idJudgment, numJudgment: numJudgment } })}
+                  >
                     Editar
-                  </button>
+                  </Button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        <Button variant="contained" style={{ backgroundColor: '#191e3b', color: 'white', fontSize: '0.7rem', marginRight: '1rem', marginTop: '1rem' }} onClick={handleCancel}>
-            Regresar
-        </Button>
       </div>
     );
   };  
@@ -98,7 +99,17 @@ const RequireDataTableComponent = () => {
         <h1>{title}</h1>
         <button className="new-button" onClick={handleNewButtonClick}>+ Nuevo</button>
       </div>
-      {isLoading ? <p>Cargando...</p> : renderTable()}
+      {isLoading ? (
+        <div className="loading-container">
+          <CircularProgress />
+          <p>Cargando...</p>
+        </div>
+      ) : (
+        renderTable()
+      )}
+      <Button variant="contained" style={{ backgroundColor: '#2c304b', color: 'white', fontSize: '0.6rem', marginRight: '1rem', marginTop: '1rem' }} onClick={handleCancel}>
+        Regresar
+      </Button>
     </div>
   );
 };
