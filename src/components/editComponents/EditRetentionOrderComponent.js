@@ -393,20 +393,22 @@ const EditRetentionOrderComponent = () => {
       </div>
       <TableContainer component={Paper} className="transaction-table-container">
         <Table className="transaction-table" aria-label="transaction table">
-          <TableHead>
+        <TableHead sx={{ fontSize: '0.75rem !important' }}>
+          <TableRow>
             <TableCell>Nombres</TableCell>
             <TableCell>Apellidos</TableCell>
             <TableCell>Tipo identificación</TableCell>
             <TableCell>Identificación</TableCell>
-            <TableCell>Num Oficio</TableCell>
+            <TableCell>Oficio</TableCell>
             <TableCell>Monto</TableCell>
             <TableCell>Banco</TableCell>
             <TableCell>Tipo Cuenta</TableCell>
-            <TableCell>Num Cuenta</TableCell>
+            <TableCell>Cuenta</TableCell>
             <TableCell>Estado Transaccion</TableCell>
             <TableCell>Fecha Respuesta</TableCell>
             <TableCell>Acción</TableCell>
-          </TableHead>
+          </TableRow>
+        </TableHead>
           <TableBody>
               {tableData.map((row, index) => (
                 <TableRow key={index}>
@@ -422,6 +424,11 @@ const EditRetentionOrderComponent = () => {
                       InputProps={{
                         disableUnderline: true,
                       }}
+                      sx={{
+                        '& .MuiInputBase-input': {
+                          fontSize: '0.7rem', 
+                        },
+                      }}
                     />
                   </TableCell>
                   <TableCell>
@@ -436,6 +443,11 @@ const EditRetentionOrderComponent = () => {
                       InputProps={{
                         disableUnderline: true,
                       }}
+                      sx={{
+                        '& .MuiInputBase-input': {
+                          fontSize: '0.7rem', 
+                        },
+                      }}
                     />
                   </TableCell>
                   <TableCell>
@@ -447,6 +459,11 @@ const EditRetentionOrderComponent = () => {
                       onChange={(e) => handleTableInputChange(index, e)}
                       variant="outlined"
                       margin="dense"
+                      sx={{
+                        '& .MuiInputBase-input': {
+                          fontSize: '0.7rem', 
+                        },
+                      }}
                     >
                       <MenuItem value="">
                         <em>Seleccione...</em>
@@ -468,6 +485,11 @@ const EditRetentionOrderComponent = () => {
                         InputProps={{
                           disableUnderline: true,
                         }}
+                        sx={{
+                          '& .MuiInputBase-input': {
+                            fontSize: '0.7rem', 
+                          },
+                        }}
                       />
                     </TableCell>
                     <TableCell>
@@ -481,6 +503,11 @@ const EditRetentionOrderComponent = () => {
                         margin="dense"
                         InputProps={{
                           disableUnderline: true,
+                        }}
+                        sx={{
+                          '& .MuiInputBase-input': {
+                            fontSize: '0.7rem', 
+                          },
                         }}
                       />
                     </TableCell>
@@ -496,6 +523,11 @@ const EditRetentionOrderComponent = () => {
                         InputProps={{
                           disableUnderline: true,
                         }}
+                        sx={{
+                          '& .MuiInputBase-input': {
+                            fontSize: '0.7rem', 
+                          },
+                        }}
                       />
                     </TableCell>
                     <TableCell>
@@ -507,6 +539,11 @@ const EditRetentionOrderComponent = () => {
                         onChange={(e) => handleTableInputChange(index, e)}
                         variant="outlined"
                         margin="dense"
+                        sx={{
+                          '& .MuiInputBase-input': {
+                            fontSize: '0.7rem', 
+                          },
+                        }}
                       >
                         <MenuItem value="">
                           <em>Seleccione...</em>
@@ -527,6 +564,11 @@ const EditRetentionOrderComponent = () => {
                         onChange={(e) => handleTableInputChange(index, e)}
                         variant="outlined"
                         margin="dense"
+                        sx={{
+                          '& .MuiInputBase-input': {
+                            fontSize: '0.7rem', 
+                          },
+                        }}
                       >
                         <MenuItem value="">
                           <em>Seleccione...</em>
@@ -547,6 +589,11 @@ const EditRetentionOrderComponent = () => {
                         InputProps={{
                           disableUnderline: true,
                         }}
+                        sx={{
+                          '& .MuiInputBase-input': {
+                            fontSize: '0.7rem', 
+                          },
+                        }}
                       />
                     </TableCell>
                     <TableCell>
@@ -560,6 +607,16 @@ const EditRetentionOrderComponent = () => {
                         margin="dense"
                         InputProps={{
                           disableUnderline: true,
+                          readOnly: true,
+                          sx: {
+                            '.MuiInputBase-input': {
+                              fontSize: '0.75rem',
+                              backgroundColor: '#193b3a',
+                              color: 'white',
+                              borderRadius: '4px',
+                              padding: '8px',
+                            },
+                          },
                         }}
                       />
                     </TableCell>
@@ -574,6 +631,16 @@ const EditRetentionOrderComponent = () => {
                         margin="dense"
                         InputProps={{
                           disableUnderline: true,
+                          readOnly: true,
+                          sx: {
+                            '.MuiInputBase-input': {
+                              fontSize: '0.75rem',
+                              backgroundColor: '#193b3a',
+                              color: 'white',
+                              borderRadius: '4px',
+                              padding: '8px',
+                            },
+                          },
                         }}
                       />
                     </TableCell>

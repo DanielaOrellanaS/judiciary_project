@@ -383,13 +383,13 @@ const EditRequireDataComponent = () => {
       </div>
       <TableContainer component={Paper} className="transaction-table-container">
         <Table className="transaction-table" aria-label="transaction table">
-          <TableHead>
+          <TableHead sx={{ fontSize: '0.75rem !important' }}>
             <TableCell>Nombres</TableCell>
             <TableCell>Apellidos</TableCell>
             <TableCell>Tipo identificación</TableCell>
             <TableCell>Identificación</TableCell>
             <TableCell>Tipo Cuenta</TableCell>
-            <TableCell>Num Cuenta</TableCell>
+            <TableCell>Cuenta</TableCell>
             <TableCell>Banco</TableCell>
             <TableCell>Estado Cuenta</TableCell>
             <TableCell>Fecha Respuesta</TableCell>
@@ -410,6 +410,11 @@ const EditRequireDataComponent = () => {
                       InputProps={{
                         disableUnderline: true,
                       }}
+                      sx={{
+                        '& .MuiInputBase-input': {
+                          fontSize: '0.7rem', 
+                        },
+                      }}
                     />
                   </TableCell>
                   <TableCell>
@@ -424,6 +429,11 @@ const EditRequireDataComponent = () => {
                       InputProps={{
                         disableUnderline: true,
                       }}
+                      sx={{
+                        '& .MuiInputBase-input': {
+                          fontSize: '0.7rem', 
+                        },
+                      }}
                     />
                   </TableCell>
                   <TableCell>
@@ -435,6 +445,11 @@ const EditRequireDataComponent = () => {
                       onChange={(e) => handleTableInputChange(index, e)}
                       variant="outlined"
                       margin="dense"
+                      sx={{
+                        '& .MuiInputBase-input': {
+                          fontSize: '0.7rem', 
+                        },
+                      }}
                     >
                       <MenuItem value="">
                         <em>Seleccione...</em>
@@ -456,6 +471,11 @@ const EditRequireDataComponent = () => {
                         InputProps={{
                           disableUnderline: true,
                         }}
+                        sx={{
+                          '& .MuiInputBase-input': {
+                            fontSize: '0.7rem', 
+                          },
+                        }}
                       />
                     </TableCell>
                     <TableCell>
@@ -467,6 +487,11 @@ const EditRequireDataComponent = () => {
                         onChange={(e) => handleTableInputChange(index, e)}
                         variant="outlined"
                         margin="dense"
+                        sx={{
+                          '& .MuiInputBase-input': {
+                            fontSize: '0.7rem', 
+                          },
+                        }}
                       >
                         <MenuItem value="">
                           <em>Seleccione...</em>
@@ -486,6 +511,16 @@ const EditRequireDataComponent = () => {
                         margin="dense"
                         InputProps={{
                           disableUnderline: true,
+                          readOnly: true,
+                          sx: {
+                            '.MuiInputBase-input': {
+                              fontSize: '0.75rem',
+                              backgroundColor: '#193b3a',
+                              color: 'white',
+                              borderRadius: '4px',
+                              padding: '8px',
+                            },
+                          },
                         }}
                       />
                     </TableCell>
@@ -498,6 +533,19 @@ const EditRequireDataComponent = () => {
                         onChange={(e) => handleTableInputChange(index, e)}
                         variant="outlined"
                         margin="dense"
+                        InputProps={{
+                          disableUnderline: true,
+                          readOnly: true,
+                          sx: {
+                            '.MuiInputBase-input': {
+                              fontSize: '0.75rem',
+                              backgroundColor: '#193b3a',
+                              color: 'white',
+                              borderRadius: '4px',
+                              padding: '8px',
+                            },
+                          },
+                        }}
                       >
                         <MenuItem value="">
                           <em>Seleccione...</em>
@@ -520,6 +568,16 @@ const EditRequireDataComponent = () => {
                         margin="dense"
                         InputProps={{
                           disableUnderline: true,
+                          readOnly: true,
+                          sx: {
+                            '.MuiInputBase-input': {
+                              fontSize: '0.75rem',
+                              backgroundColor: '#193b3a',
+                              color: 'white',
+                              borderRadius: '4px',
+                              padding: '8px',
+                            },
+                          },
                         }}
                       />
                     </TableCell>
@@ -534,6 +592,16 @@ const EditRequireDataComponent = () => {
                         margin="dense"
                         InputProps={{
                           disableUnderline: true,
+                          readOnly: true,
+                          sx: {
+                            '.MuiInputBase-input': {
+                              fontSize: '0.75rem',
+                              backgroundColor: '#193b3a',
+                              color: 'white',
+                              borderRadius: '4px',
+                              padding: '8px',
+                            },
+                          },
                         }}
                       />
                     </TableCell>
