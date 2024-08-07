@@ -1,5 +1,5 @@
-const localUrl = 'https://rest-api-notification.onrender.com';
-const apiUrl = 'http://127.0.0.1:8000';  
+const localUrl = 'http://127.0.0.1:8000';
+const apiUrl = 'https://rest-api-notification.onrender.com';  
 
 export async function getJudgment() {
   try {
