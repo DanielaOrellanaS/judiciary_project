@@ -159,7 +159,6 @@ const SeizureOrderComponent = () => {
   
     const confirmed = window.confirm('¿Estás seguro de que deseas guardar los datos?');
     if (!confirmed) {
-      navigate(-1);
       return;
     }
   
