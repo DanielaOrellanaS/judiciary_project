@@ -441,10 +441,16 @@ const EditSeizureOrderComponent = () => {
                       margin="dense"
                       InputProps={{
                         disableUnderline: true,
+                        sx: {
+                          '& fieldset': {
+                            border: 'none',
+                          },
+                        },
                       }}
                       sx={{
                         '& .MuiInputBase-input': {
-                          fontSize: '0.7rem', 
+                          fontSize: '0.7rem',
+                          padding: '8px',
                         },
                       }}
                     />
@@ -460,10 +466,16 @@ const EditSeizureOrderComponent = () => {
                       margin="dense"
                       InputProps={{
                         disableUnderline: true,
+                        sx: {
+                          '& fieldset': {
+                            border: 'none',
+                          },
+                        },
                       }}
                       sx={{
                         '& .MuiInputBase-input': {
-                          fontSize: '0.7rem', 
+                          fontSize: '0.7rem',
+                          padding: '8px',
                         },
                       }}
                     />
@@ -477,11 +489,21 @@ const EditSeizureOrderComponent = () => {
                       onChange={(e) => handleTableInputChange(index, e)}
                       variant="outlined"
                       margin="dense"
-                        sx={{
-                          '& .MuiInputBase-input': {
-                            fontSize: '0.7rem', 
-                          },
-                        }}
+                      sx={{
+                        '& .MuiInputBase-input': {
+                          fontSize: '0.7rem',
+                          padding: '8px',
+                        },
+                        '& .MuiOutlinedInput-notchedOutline': {
+                          border: 'none',
+                        },
+                        '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                          border: 'none',
+                        },
+                        '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                          border: 'none',
+                        },
+                      }}
                     >
                       <MenuItem value="">
                         <em>Seleccione...</em>
@@ -490,7 +512,7 @@ const EditSeizureOrderComponent = () => {
                       <MenuItem value="pasaporte">Pasaporte</MenuItem>
                       <MenuItem value="ruc">RUC</MenuItem>
                     </Select>
-                    </TableCell>
+                  </TableCell>
                     <TableCell>
                       <TextField
                         fullWidth
@@ -502,10 +524,17 @@ const EditSeizureOrderComponent = () => {
                         margin="dense"
                         InputProps={{
                           disableUnderline: true,
+                          sx: {
+                            '& fieldset': {
+                              border: 'none',
+                            },
+                          },
                         }}
                         sx={{
                           '& .MuiInputBase-input': {
-                            fontSize: '0.7rem', 
+                            fontSize: '0.7rem',
+                            padding: '8px',
+                            minWidth: '70px',
                           },
                         }}
                       />
@@ -521,10 +550,17 @@ const EditSeizureOrderComponent = () => {
                         margin="dense"
                         InputProps={{
                           disableUnderline: true,
+                          sx: {
+                            '& fieldset': {
+                              border: 'none',
+                            },
+                          },
                         }}
                         sx={{
                           '& .MuiInputBase-input': {
-                            fontSize: '0.7rem', 
+                            fontSize: '0.7rem',
+                            padding: '8px',
+                            minWidth: '120px',
                           },
                         }}
                       />
@@ -540,10 +576,17 @@ const EditSeizureOrderComponent = () => {
                         margin="dense"
                         InputProps={{
                           disableUnderline: true,
+                          sx: {
+                            '& fieldset': {
+                              border: 'none',
+                            },
+                          },
                         }}
                         sx={{
                           '& .MuiInputBase-input': {
-                            fontSize: '0.7rem', 
+                            fontSize: '0.7rem',
+                            padding: '8px',
+                            minWidth: '40px',
                           },
                         }}
                       />
@@ -559,9 +602,19 @@ const EditSeizureOrderComponent = () => {
                         margin="dense"
                         sx={{
                           '& .MuiInputBase-input': {
-                            fontSize: '0.7rem', 
+                            fontSize: '0.7rem',
+                            padding: '8px',
                           },
-                        }}
+                          '& .MuiOutlinedInput-notchedOutline': {
+                            border: 'none',
+                          },
+                          '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                            border: 'none',
+                          },
+                          '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                            border: 'none',
+                          },
+                        }}                    
                       >
                         <MenuItem value="">
                           <em>Seleccione...</em>
@@ -584,9 +637,19 @@ const EditSeizureOrderComponent = () => {
                         margin="dense"
                         sx={{
                           '& .MuiInputBase-input': {
-                            fontSize: '0.7rem', 
+                            fontSize: '0.7rem',
+                            padding: '8px',
                           },
-                        }}
+                          '& .MuiOutlinedInput-notchedOutline': {
+                            border: 'none',
+                          },
+                          '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                            border: 'none',
+                          },
+                          '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                            border: 'none',
+                          },
+                        }}                    
                       >
                         <MenuItem value="">
                           <em>Seleccione...</em>
@@ -606,10 +669,17 @@ const EditSeizureOrderComponent = () => {
                         margin="dense"
                         InputProps={{
                           disableUnderline: true,
+                          sx: {
+                            '& fieldset': {
+                              border: 'none',
+                            },
+                          },
                         }}
                         sx={{
                           '& .MuiInputBase-input': {
-                            fontSize: '0.7rem', 
+                            fontSize: '0.7rem',
+                            padding: '8px',
+                            minWidth: '70px',
                           },
                         }}
                       />
@@ -625,10 +695,16 @@ const EditSeizureOrderComponent = () => {
                       margin="dense"
                       InputProps={{
                         disableUnderline: true,
+                        sx: {
+                          '& fieldset': {
+                            border: 'none',
+                          },
+                        },
                       }}
                       sx={{
                         '& .MuiInputBase-input': {
-                          fontSize: '0.7rem', 
+                          fontSize: '0.7rem',
+                          padding: '8px',
                         },
                       }}
                     />
@@ -644,10 +720,16 @@ const EditSeizureOrderComponent = () => {
                       margin="dense"
                       InputProps={{
                         disableUnderline: true,
+                        sx: {
+                          '& fieldset': {
+                            border: 'none',
+                          },
+                        },
                       }}
                       sx={{
                         '& .MuiInputBase-input': {
-                          fontSize: '0.7rem', 
+                          fontSize: '0.7rem',
+                          padding: '8px',
                         },
                       }}
                     />
@@ -663,9 +745,19 @@ const EditSeizureOrderComponent = () => {
                         margin="dense"
                         sx={{
                           '& .MuiInputBase-input': {
-                            fontSize: '0.7rem', 
+                            fontSize: '0.7rem',
+                            padding: '8px',
                           },
-                        }}
+                          '& .MuiOutlinedInput-notchedOutline': {
+                            border: 'none',
+                          },
+                          '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                            border: 'none',
+                          },
+                          '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                            border: 'none',
+                          },
+                        }}                    
                       >
                         <MenuItem value="">
                           <em>Seleccione...</em>
@@ -685,10 +777,17 @@ const EditSeizureOrderComponent = () => {
                         margin="dense"
                         InputProps={{
                           disableUnderline: true,
+                          sx: {
+                            '& fieldset': {
+                              border: 'none',
+                            },
+                          },
                         }}
                         sx={{
                           '& .MuiInputBase-input': {
-                            fontSize: '0.7rem', 
+                            fontSize: '0.7rem',
+                            padding: '8px',
+                            minWidth: '70px',
                           },
                         }}
                       />
@@ -702,11 +801,21 @@ const EditSeizureOrderComponent = () => {
                       onChange={(e) => handleTableInputChange(index, e)}
                       variant="outlined"
                       margin="dense"
-                        sx={{
-                          '& .MuiInputBase-input': {
-                            fontSize: '0.7rem', 
-                          },
-                        }}
+                      sx={{
+                        '& .MuiInputBase-input': {
+                          fontSize: '0.7rem',
+                          padding: '8px',
+                        },
+                        '& .MuiOutlinedInput-notchedOutline': {
+                          border: 'none',
+                        },
+                        '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                          border: 'none',
+                        },
+                        '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                          border: 'none',
+                        },
+                      }}                  
                     >
                       <MenuItem value="">
                         <em>Seleccione...</em>
@@ -727,10 +836,17 @@ const EditSeizureOrderComponent = () => {
                       margin="dense"
                       InputProps={{
                         disableUnderline: true,
+                        sx: {
+                          '& fieldset': {
+                            border: 'none',
+                          },
+                        },
                       }}
                       sx={{
                         '& .MuiInputBase-input': {
-                          fontSize: '0.7rem', 
+                          fontSize: '0.7rem',
+                          padding: '8px',
+                          minWidth: '70px',
                         },
                       }}
                     />
@@ -745,11 +861,21 @@ const EditSeizureOrderComponent = () => {
                       onChange={(e) => handleTableInputChange(index, e)}
                       variant="outlined"
                       margin="dense"
-                        sx={{
-                          '& .MuiInputBase-input': {
-                            fontSize: '0.7rem', 
-                          },
-                        }}
+                      sx={{
+                        '& .MuiInputBase-input': {
+                          fontSize: '0.7rem',
+                          padding: '8px',
+                        },
+                        '& .MuiOutlinedInput-notchedOutline': {
+                          border: 'none',
+                        },
+                        '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                          border: 'none',
+                        },
+                        '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                          border: 'none',
+                        },
+                      }}                  
                     >
                       <MenuItem value="">
                         <em>Seleccione...</em>

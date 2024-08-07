@@ -409,10 +409,16 @@ const EditRequireDataComponent = () => {
                       margin="dense"
                       InputProps={{
                         disableUnderline: true,
+                        sx: {
+                          '& fieldset': {
+                            border: 'none',
+                          },
+                        },
                       }}
                       sx={{
                         '& .MuiInputBase-input': {
-                          fontSize: '0.7rem', 
+                          fontSize: '0.7rem',
+                          padding: '8px',
                         },
                       }}
                     />
@@ -428,10 +434,16 @@ const EditRequireDataComponent = () => {
                       margin="dense"
                       InputProps={{
                         disableUnderline: true,
+                        sx: {
+                          '& fieldset': {
+                            border: 'none',
+                          },
+                        },
                       }}
                       sx={{
                         '& .MuiInputBase-input': {
-                          fontSize: '0.7rem', 
+                          fontSize: '0.7rem',
+                          padding: '8px',
                         },
                       }}
                     />
@@ -447,7 +459,17 @@ const EditRequireDataComponent = () => {
                       margin="dense"
                       sx={{
                         '& .MuiInputBase-input': {
-                          fontSize: '0.7rem', 
+                          fontSize: '0.7rem',
+                          padding: '8px',
+                        },
+                        '& .MuiOutlinedInput-notchedOutline': {
+                          border: 'none',
+                        },
+                        '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                          border: 'none',
+                        },
+                        '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                          border: 'none',
                         },
                       }}
                     >
@@ -470,12 +492,19 @@ const EditRequireDataComponent = () => {
                         margin="dense"
                         InputProps={{
                           disableUnderline: true,
+                          sx: {
+                            '& fieldset': {
+                              border: 'none',
+                            },
+                          },
                         }}
                         sx={{
                           '& .MuiInputBase-input': {
-                            fontSize: '0.7rem', 
+                            fontSize: '0.7rem',
+                            padding: '8px',
+                            minWidth: '70px',
                           },
-                        }}
+                        }}      
                       />
                     </TableCell>
                     <TableCell>
@@ -489,7 +518,20 @@ const EditRequireDataComponent = () => {
                         margin="dense"
                         sx={{
                           '& .MuiInputBase-input': {
-                            fontSize: '0.7rem', 
+                            fontSize: '0.7rem',
+                            padding: '8px',
+                            backgroundColor: '#a8acbf',
+                            color: 'black',
+                            borderRadius: '4px',
+                          },
+                          '& .MuiOutlinedInput-notchedOutline': {
+                            border: 'none',
+                          },
+                          '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                            border: 'none',
+                          },
+                          '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                            border: 'none',
                           },
                         }}
                       >
@@ -511,15 +553,20 @@ const EditRequireDataComponent = () => {
                         margin="dense"
                         InputProps={{
                           disableUnderline: true,
-                          readOnly: true,
                           sx: {
-                            '.MuiInputBase-input': {
-                              fontSize: '0.75rem',
-                              backgroundColor: '#193b3a',
-                              color: 'white',
-                              borderRadius: '4px',
-                              padding: '8px',
+                            '& fieldset': {
+                              border: 'none',
                             },
+                          },
+                        }}
+                        sx={{
+                          '& .MuiInputBase-input': {
+                            fontSize: '0.7rem',
+                            backgroundColor: '#a8acbf',
+                            color: 'black',
+                            padding: '8px',
+                            borderRadius: '4px',
+                            minWidth: '70px',
                           },
                         }}
                       />
@@ -533,19 +580,24 @@ const EditRequireDataComponent = () => {
                         onChange={(e) => handleTableInputChange(index, e)}
                         variant="outlined"
                         margin="dense"
-                        InputProps={{
-                          disableUnderline: true,
-                          readOnly: true,
-                          sx: {
-                            '.MuiInputBase-input': {
-                              fontSize: '0.75rem',
-                              backgroundColor: '#193b3a',
-                              color: 'white',
-                              borderRadius: '4px',
-                              padding: '8px',
-                            },
+                        sx={{
+                          '& .MuiInputBase-input': {
+                            fontSize: '0.7rem',
+                            padding: '8px',
+                            backgroundColor: '#a8acbf',
+                            color: 'black',
+                            borderRadius: '4px',
                           },
-                        }}
+                          '& .MuiOutlinedInput-notchedOutline': {
+                            border: 'none',
+                          },
+                          '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                            border: 'none',
+                          },
+                          '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                            border: 'none',
+                          },
+                        }} 
                       >
                         <MenuItem value="">
                           <em>Seleccione...</em>
@@ -572,8 +624,8 @@ const EditRequireDataComponent = () => {
                           sx: {
                             '.MuiInputBase-input': {
                               fontSize: '0.75rem',
-                              backgroundColor: '#193b3a',
-                              color: 'white',
+                              backgroundColor: '#a8acbf',
+                              color: 'black',
                               borderRadius: '4px',
                               padding: '8px',
                             },
@@ -596,8 +648,8 @@ const EditRequireDataComponent = () => {
                           sx: {
                             '.MuiInputBase-input': {
                               fontSize: '0.75rem',
-                              backgroundColor: '#193b3a',
-                              color: 'white',
+                              backgroundColor: '#a8acbf',
+                              color: 'black',
                               borderRadius: '4px',
                               padding: '8px',
                             },

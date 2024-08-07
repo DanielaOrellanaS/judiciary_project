@@ -1,5 +1,5 @@
-const localUrl = 'http://127.0.0.1:8000';
-const apiUrl = 'https://rest-api-notification.onrender.com';  
+const localUrl = 'https://rest-api-notification.onrender.com';
+const apiUrl = 'http://127.0.0.1:8000';  
 
 export async function getJudgment() {
   try {
@@ -72,9 +72,6 @@ export async function updateJudgment(id, data) {
       body: JSON.stringify(data),
     });
 
-    console.log("IDENTIFICADOR: ", id)
-    console.log("DATA UPDATE: ", data)
-
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData.detail || 'Failed to update judgment');
@@ -97,9 +94,6 @@ export async function updateOrders(id, data) {
       },
       body: JSON.stringify(data),
     });
-
-    console.log("IDENTIFICADOR: ", id)
-    console.log("DATA UPDATE: ", data)
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -196,6 +190,7 @@ export async function getBankResponse() {
       throw new Error('Failed to fetch bank response');
     }
     const data = await response.json();
+    console.log('Data:', data);
     return data;
   } catch (error) {
     console.error('Error fetching bank response:', error);

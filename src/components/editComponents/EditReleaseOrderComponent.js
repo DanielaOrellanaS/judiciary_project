@@ -416,10 +416,16 @@ const EditReleaseOrderComponent = () => {
                       margin="dense"
                       InputProps={{
                         disableUnderline: true,
+                        sx: {
+                          '& fieldset': {
+                            border: 'none',
+                          },
+                        },
                       }}
                       sx={{
                         '& .MuiInputBase-input': {
-                          fontSize: '0.7rem', 
+                          fontSize: '0.7rem',
+                          padding: '8px',
                         },
                       }}
                     />
@@ -435,10 +441,16 @@ const EditReleaseOrderComponent = () => {
                       margin="dense"
                       InputProps={{
                         disableUnderline: true,
+                        sx: {
+                          '& fieldset': {
+                            border: 'none',
+                          },
+                        },
                       }}
                       sx={{
                         '& .MuiInputBase-input': {
-                          fontSize: '0.7rem', 
+                          fontSize: '0.7rem',
+                          padding: '8px',
                         },
                       }}
                     />
@@ -454,7 +466,17 @@ const EditReleaseOrderComponent = () => {
                       margin="dense"
                       sx={{
                         '& .MuiInputBase-input': {
-                          fontSize: '0.7rem', 
+                          fontSize: '0.7rem',
+                          padding: '8px',
+                        },
+                        '& .MuiOutlinedInput-notchedOutline': {
+                          border: 'none',
+                        },
+                        '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                          border: 'none',
+                        },
+                        '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                          border: 'none',
                         },
                       }}
                     >
@@ -477,12 +499,19 @@ const EditReleaseOrderComponent = () => {
                         margin="dense"
                         InputProps={{
                           disableUnderline: true,
+                          sx: {
+                            '& fieldset': {
+                              border: 'none',
+                            },
+                          },
                         }}
                         sx={{
                           '& .MuiInputBase-input': {
-                            fontSize: '0.7rem', 
+                            fontSize: '0.7rem',
+                            padding: '8px',
+                            minWidth: '70px',
                           },
-                        }}
+                        }}  
                       />
                     </TableCell>
                     <TableCell>
@@ -496,12 +525,19 @@ const EditReleaseOrderComponent = () => {
                         margin="dense"
                         InputProps={{
                           disableUnderline: true,
+                          sx: {
+                            '& fieldset': {
+                              border: 'none',
+                            },
+                          },
                         }}
                         sx={{
                           '& .MuiInputBase-input': {
-                            fontSize: '0.7rem', 
+                            fontSize: '0.7rem',
+                            padding: '8px',
+                            minWidth: '120px',
                           },
-                        }}
+                        }} 
                       />
                     </TableCell>
                     <TableCell>
@@ -515,10 +551,17 @@ const EditReleaseOrderComponent = () => {
                         margin="dense"
                         InputProps={{
                           disableUnderline: true,
+                          sx: {
+                            '& fieldset': {
+                              border: 'none',
+                            },
+                          },
                         }}
                         sx={{
                           '& .MuiInputBase-input': {
-                            fontSize: '0.7rem', 
+                            fontSize: '0.7rem',
+                            padding: '8px',
+                            minWidth: '40px',
                           },
                         }}
                       />
@@ -534,9 +577,19 @@ const EditReleaseOrderComponent = () => {
                         margin="dense"
                         sx={{
                           '& .MuiInputBase-input': {
-                            fontSize: '0.7rem', 
+                            fontSize: '0.7rem',
+                            padding: '8px',
                           },
-                        }}
+                          '& .MuiOutlinedInput-notchedOutline': {
+                            border: 'none',
+                          },
+                          '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                            border: 'none',
+                          },
+                          '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                            border: 'none',
+                          },
+                        }} 
                       >
                         <MenuItem value="">
                           <em>Seleccione...</em>
@@ -559,9 +612,19 @@ const EditReleaseOrderComponent = () => {
                         margin="dense"
                         sx={{
                           '& .MuiInputBase-input': {
-                            fontSize: '0.7rem', 
+                            fontSize: '0.7rem',
+                            padding: '8px',
                           },
-                        }}
+                          '& .MuiOutlinedInput-notchedOutline': {
+                            border: 'none',
+                          },
+                          '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                            border: 'none',
+                          },
+                          '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                            border: 'none',
+                          },
+                        }}  
                       >
                         <MenuItem value="">
                           <em>Seleccione...</em>
@@ -581,10 +644,17 @@ const EditReleaseOrderComponent = () => {
                         margin="dense"
                         InputProps={{
                           disableUnderline: true,
+                          sx: {
+                            '& fieldset': {
+                              border: 'none',
+                            },
+                          },
                         }}
                         sx={{
                           '& .MuiInputBase-input': {
-                            fontSize: '0.7rem', 
+                            fontSize: '0.7rem',
+                            padding: '8px',
+                            minWidth: '70px',
                           },
                         }}
                       />
@@ -604,8 +674,8 @@ const EditReleaseOrderComponent = () => {
                           sx: {
                             '.MuiInputBase-input': {
                               fontSize: '0.75rem',
-                              backgroundColor: '#193b3a',
-                              color: 'white',
+                              backgroundColor: '#a8acbf',
+                              color: 'black',
                               borderRadius: '4px',
                               padding: '8px',
                             },
@@ -628,10 +698,11 @@ const EditReleaseOrderComponent = () => {
                           sx: {
                             '.MuiInputBase-input': {
                               fontSize: '0.75rem',
-                              backgroundColor: '#193b3a',
-                              color: 'white',
+                              backgroundColor: '#a8acbf',
+                              color: 'black',
                               borderRadius: '4px',
                               padding: '8px',
+                              minWidth: '70px',
                             },
                           },
                         }}
