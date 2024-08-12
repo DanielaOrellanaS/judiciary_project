@@ -405,9 +405,9 @@ const EditSeizureOrderComponent = () => {
         <Table className="transaction-table" aria-label="transaction table">
         <TableHead>
               <TableRow>
-                <TableCell sx={{ border: '1px solid white', textAlign: 'center !important', fontSize: '0.75rem !important', backgroundColor: '#f2f2f2', padding: '10px' }} colSpan={9} align="center">Demandado</TableCell>
-                <TableCell sx={{ border: '1px solid white', textAlign: 'center !important', fontSize: '0.75rem !important', backgroundColor: '#f2f2f2', padding: '10px' }} colSpan={7} align="center">Beneficiario</TableCell>
-                <TableCell colSpan={3}></TableCell> 
+                <TableCell sx={{ textAlign: 'center !important', fontSize: '0.75rem !important', backgroundColor: '#f2f2f2', padding: '10px' }} colSpan={9} align="center">Demandado</TableCell>
+                <TableCell sx={{ textAlign: 'center !important', fontSize: '0.75rem !important', backgroundColor: '#2c304b !important', padding: '10px' }} colSpan={7} align="center">Beneficiario</TableCell>
+                <TableCell sx={{ textAlign: 'center !important', fontSize: '0.75rem !important', backgroundColor: '#f2f2f2', padding: '10px' }} colSpan={3} align="center">Transaccion</TableCell> 
               </TableRow>
               <TableRow sx={{ fontSize: '0.75rem !important' }}>
                 <TableCell>Nombres</TableCell>
@@ -419,13 +419,13 @@ const EditSeizureOrderComponent = () => {
                 <TableCell>Banco</TableCell>
                 <TableCell>Tipo Cuenta</TableCell>
                 <TableCell>Cuenta</TableCell>
-                <TableCell>Nombres</TableCell>
-                <TableCell>Apellidos</TableCell>
-                <TableCell>Tipo Cuenta</TableCell>
-                <TableCell>Cuenta</TableCell>
-                <TableCell>Tipo Identification</TableCell>
-                <TableCell>Identificacion</TableCell>
-                <TableCell>Banco</TableCell>
+                <TableCell sx={{ backgroundColor: '#2c304b !important' }}>Nombres</TableCell>
+                <TableCell sx={{ backgroundColor: '#2c304b !important' }}>Apellidos</TableCell>
+                <TableCell sx={{ backgroundColor: '#2c304b !important' }}>Tipo Cuenta</TableCell>
+                <TableCell sx={{ backgroundColor: '#2c304b !important' }}>Cuenta</TableCell>
+                <TableCell sx={{ backgroundColor: '#2c304b !important' }}>Tipo Identification</TableCell>
+                <TableCell sx={{ backgroundColor: '#2c304b !important' }}>Identificacion</TableCell>
+                <TableCell sx={{ backgroundColor: '#2c304b !important' }}>Banco</TableCell>
                 <TableCell>Estado Transaccion</TableCell>
                 <TableCell>Fecha Respuesta</TableCell>
                 <TableCell>Acción</TableCell>
