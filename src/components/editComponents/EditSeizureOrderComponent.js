@@ -404,6 +404,11 @@ const EditSeizureOrderComponent = () => {
       <TableContainer component={Paper} className="transaction-table-container">
         <Table className="transaction-table" aria-label="transaction table">
         <TableHead>
+              <TableRow>
+                <TableCell sx={{ border: '1px solid white', textAlign: 'center !important', fontSize: '0.75rem !important', backgroundColor: '#f2f2f2', padding: '10px' }} colSpan={9} align="center">Demandado</TableCell>
+                <TableCell sx={{ border: '1px solid white', textAlign: 'center !important', fontSize: '0.75rem !important', backgroundColor: '#f2f2f2', padding: '10px' }} colSpan={7} align="center">Beneficiario</TableCell>
+                <TableCell colSpan={3}></TableCell> 
+              </TableRow>
               <TableRow sx={{ fontSize: '0.75rem !important' }}>
                 <TableCell>Nombres</TableCell>
                 <TableCell>Apellidos</TableCell>

@@ -357,7 +357,7 @@ const RetentionOrderComponent = () => {
       <TableContainer component={Paper} className="transaction-table-container">
         <Table className="transaction-table" aria-label="transaction table">
           <TableHead>
-            <TableRow>
+            <TableRow sx={{ fontSize: '0.75rem !important' }}>
               <TableCell>Nombres</TableCell>
               <TableCell>Apellidos</TableCell>
               <TableCell>Tipo identificación</TableCell>
@@ -384,6 +384,17 @@ const RetentionOrderComponent = () => {
                     margin="dense"
                     InputProps={{
                       disableUnderline: true,
+                      sx: {
+                        '& fieldset': {
+                          border: 'none',
+                        },
+                      },
+                    }}
+                    sx={{
+                      '& .MuiInputBase-input': {
+                        fontSize: '0.7rem',
+                        padding: '8px',
+                      },
                     }}
                   />
                 </TableCell>
@@ -398,6 +409,17 @@ const RetentionOrderComponent = () => {
                     margin="dense"
                     InputProps={{
                       disableUnderline: true,
+                      sx: {
+                        '& fieldset': {
+                          border: 'none',
+                        },
+                      },
+                    }}
+                    sx={{
+                      '& .MuiInputBase-input': {
+                        fontSize: '0.7rem',
+                        padding: '8px',
+                      },
                     }}
                   />
                 </TableCell>
@@ -410,6 +432,21 @@ const RetentionOrderComponent = () => {
                     onChange={(e) => handleTableInputChange(index, e)}
                     variant="outlined"
                     margin="dense"
+                    sx={{
+                      '& .MuiInputBase-input': {
+                        fontSize: '0.7rem',
+                        padding: '8px',
+                      },
+                      '& .MuiOutlinedInput-notchedOutline': {
+                        border: 'none',
+                      },
+                      '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                        border: 'none',
+                      },
+                      '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                        border: 'none',
+                      },
+                    }}
                   >
                     <MenuItem value="">
                       <em>Seleccione...</em>
@@ -430,7 +467,19 @@ const RetentionOrderComponent = () => {
                     margin="dense"
                     InputProps={{
                       disableUnderline: true,
+                      sx: {
+                        '& fieldset': {
+                          border: 'none',
+                        },
+                      },
                     }}
+                    sx={{
+                      '& .MuiInputBase-input': {
+                        fontSize: '0.7rem',
+                        padding: '8px',
+                        minWidth: '70px',
+                      },
+                    }}  
                   />
                 </TableCell>
                 <TableCell>
@@ -444,7 +493,19 @@ const RetentionOrderComponent = () => {
                     margin="dense"
                     InputProps={{
                       disableUnderline: true,
+                      sx: {
+                        '& fieldset': {
+                          border: 'none',
+                        },
+                      },
                     }}
+                    sx={{
+                      '& .MuiInputBase-input': {
+                        fontSize: '0.7rem',
+                        padding: '8px',
+                        minWidth: '120px',
+                      },
+                    }}  
                   />
                 </TableCell>
                 <TableCell>
@@ -458,6 +519,18 @@ const RetentionOrderComponent = () => {
                     margin="dense"
                     InputProps={{
                       disableUnderline: true,
+                      sx: {
+                        '& fieldset': {
+                          border: 'none',
+                        },
+                      },
+                    }}
+                    sx={{
+                      '& .MuiInputBase-input': {
+                        fontSize: '0.7rem',
+                        padding: '8px',
+                        minWidth: '40px',
+                      },
                     }}
                   />
                 </TableCell>
@@ -470,6 +543,21 @@ const RetentionOrderComponent = () => {
                     onChange={(e) => handleTableInputChange(index, e)}
                     variant="outlined"
                     margin="dense"
+                    sx={{
+                      '& .MuiInputBase-input': {
+                        fontSize: '0.7rem',
+                        padding: '8px',
+                      },
+                      '& .MuiOutlinedInput-notchedOutline': {
+                        border: 'none',
+                      },
+                      '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                        border: 'none',
+                      },
+                      '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                        border: 'none',
+                      },
+                    }} 
                   >
                     <MenuItem value="">
                       <em>Seleccione...</em>
@@ -490,6 +578,21 @@ const RetentionOrderComponent = () => {
                     onChange={(e) => handleTableInputChange(index, e)}
                     variant="outlined"
                     margin="dense"
+                    sx={{
+                      '& .MuiInputBase-input': {
+                        fontSize: '0.7rem',
+                        padding: '8px',
+                      },
+                      '& .MuiOutlinedInput-notchedOutline': {
+                        border: 'none',
+                      },
+                      '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                        border: 'none',
+                      },
+                      '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                        border: 'none',
+                      },
+                    }}  
                   >
                     <MenuItem value="">
                       <em>Seleccione...</em>
@@ -509,6 +612,18 @@ const RetentionOrderComponent = () => {
                     margin="dense"
                     InputProps={{
                       disableUnderline: true,
+                      sx: {
+                        '& fieldset': {
+                          border: 'none',
+                        },
+                      },
+                    }}
+                    sx={{
+                      '& .MuiInputBase-input': {
+                        fontSize: '0.7rem',
+                        padding: '8px',
+                        minWidth: '70px',
+                      },
                     }}
                   />
                 </TableCell>

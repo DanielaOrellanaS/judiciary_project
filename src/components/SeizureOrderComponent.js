@@ -374,7 +374,12 @@ const SeizureOrderComponent = () => {
         <TableContainer component={Paper} className="transaction-table-container">
           <Table className="transaction-table" aria-label="transaction table">
             <TableHead>
-              <TableRow>
+            <TableRow>
+              <TableCell sx={{ border: '1px solid white', textAlign: 'center !important', fontSize: '0.75rem !important', backgroundColor: '#f2f2f2', padding: '10px' }} colSpan={9} align="center">Demandado</TableCell>
+              <TableCell sx={{ border: '1px solid white', textAlign: 'center !important', fontSize: '0.75rem !important', backgroundColor: '#f2f2f2', padding: '10px' }} colSpan={7} align="center">Beneficiario</TableCell>
+              <TableCell></TableCell> 
+            </TableRow>
+              <TableRow sx={{ fontSize: '0.75rem !important' }}>
                 <TableCell>Nombres</TableCell>
                 <TableCell>Apellidos</TableCell>
                 <TableCell>Tipo identificación</TableCell>
@@ -384,13 +389,13 @@ const SeizureOrderComponent = () => {
                 <TableCell>Banco</TableCell>
                 <TableCell>Tipo Cuenta</TableCell>
                 <TableCell>Num Cuenta</TableCell>
-                <TableCell>Tipo Cuenta Benef</TableCell>
+                <TableCell>Nombres</TableCell>
+                <TableCell>Apellidos</TableCell>
+                <TableCell>Tipo Cuenta</TableCell>
                 <TableCell>Num Cuenta</TableCell>
                 <TableCell>Tipo Identification</TableCell>
                 <TableCell>Identificacion</TableCell>
                 <TableCell>Banco</TableCell>
-                <TableCell>Nombres</TableCell>
-                <TableCell>Apellidos</TableCell>
                 <TableCell>Acción</TableCell>
               </TableRow>
             </TableHead>
@@ -408,6 +413,18 @@ const SeizureOrderComponent = () => {
                       margin="dense"
                       InputProps={{
                         disableUnderline: true,
+                        sx: {
+                          '& fieldset': {
+                            border: 'none',
+                          },
+                        },
+                      }}
+                      sx={{
+                        '& .MuiInputBase-input': {
+                          fontSize: '0.7rem',
+                          padding: '8px',
+                          minWidth: '100px',
+                        },
                       }}
                     />
                   </TableCell>
@@ -422,6 +439,18 @@ const SeizureOrderComponent = () => {
                       margin="dense"
                       InputProps={{
                         disableUnderline: true,
+                        sx: {
+                          '& fieldset': {
+                            border: 'none',
+                          },
+                        },
+                      }}
+                      sx={{
+                        '& .MuiInputBase-input': {
+                          fontSize: '0.7rem',
+                          padding: '8px',
+                          minWidth: '100px',
+                        },
                       }}
                     />
                   </TableCell>
@@ -434,6 +463,21 @@ const SeizureOrderComponent = () => {
                       onChange={(e) => handleTableInputChange(index, e)}
                       variant="outlined"
                       margin="dense"
+                      sx={{
+                        '& .MuiInputBase-input': {
+                          fontSize: '0.7rem',
+                          padding: '8px',
+                        },
+                        '& .MuiOutlinedInput-notchedOutline': {
+                          border: 'none',
+                        },
+                        '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                          border: 'none',
+                        },
+                        '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                          border: 'none',
+                        },
+                      }}
                     >
                       <MenuItem value="">
                         <em>Seleccione...</em>
@@ -454,6 +498,18 @@ const SeizureOrderComponent = () => {
                       margin="dense"
                       InputProps={{
                         disableUnderline: true,
+                        sx: {
+                          '& fieldset': {
+                            border: 'none',
+                          },
+                        },
+                      }}
+                      sx={{
+                        '& .MuiInputBase-input': {
+                          fontSize: '0.7rem',
+                          padding: '8px',
+                          minWidth: '70px',
+                        },
                       }}
                     />
                   </TableCell>
@@ -468,6 +524,18 @@ const SeizureOrderComponent = () => {
                       margin="dense"
                       InputProps={{
                         disableUnderline: true,
+                        sx: {
+                          '& fieldset': {
+                            border: 'none',
+                          },
+                        },
+                      }}
+                      sx={{
+                        '& .MuiInputBase-input': {
+                          fontSize: '0.7rem',
+                          padding: '8px',
+                          minWidth: '120px',
+                        },
                       }}
                     />
                   </TableCell>
@@ -482,6 +550,18 @@ const SeizureOrderComponent = () => {
                       margin="dense"
                       InputProps={{
                         disableUnderline: true,
+                        sx: {
+                          '& fieldset': {
+                            border: 'none',
+                          },
+                        },
+                      }}
+                      sx={{
+                        '& .MuiInputBase-input': {
+                          fontSize: '0.7rem',
+                          padding: '8px',
+                          minWidth: '40px',
+                        },
                       }}
                     />
                   </TableCell>
@@ -494,6 +574,21 @@ const SeizureOrderComponent = () => {
                       onChange={(e) => handleTableInputChange(index, e)}
                       variant="outlined"
                       margin="dense"
+                      sx={{
+                        '& .MuiInputBase-input': {
+                          fontSize: '0.7rem',
+                          padding: '8px',
+                        },
+                        '& .MuiOutlinedInput-notchedOutline': {
+                          border: 'none',
+                        },
+                        '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                          border: 'none',
+                        },
+                        '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                          border: 'none',
+                        },
+                      }}   
                     >
                       <MenuItem value="">
                         <em>Seleccione...</em>
@@ -514,6 +609,21 @@ const SeizureOrderComponent = () => {
                       onChange={(e) => handleTableInputChange(index, e)}
                       variant="outlined"
                       margin="dense"
+                      sx={{
+                        '& .MuiInputBase-input': {
+                          fontSize: '0.7rem',
+                          padding: '8px',
+                        },
+                        '& .MuiOutlinedInput-notchedOutline': {
+                          border: 'none',
+                        },
+                        '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                          border: 'none',
+                        },
+                        '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                          border: 'none',
+                        },
+                      }}    
                     >
                       <MenuItem value="">
                         <em>Seleccione...</em>
@@ -533,9 +643,73 @@ const SeizureOrderComponent = () => {
                       margin="dense"
                       InputProps={{
                         disableUnderline: true,
+                        sx: {
+                          '& fieldset': {
+                            border: 'none',
+                          },
+                        },
+                      }}
+                      sx={{
+                        '& .MuiInputBase-input': {
+                          fontSize: '0.7rem',
+                          padding: '8px',
+                          minWidth: '70px',
+                        },
                       }}
                     />
                   </TableCell>
+                  <TableCell>
+                  <TextField
+                    fullWidth
+                    id="nameBeneficiary"
+                    name="nameBeneficiary"
+                    value={row.nameBeneficiary}
+                    onChange={(e) => handleTableInputChange(index, e)}
+                    variant="outlined"
+                    margin="dense"
+                    InputProps={{
+                      disableUnderline: true,
+                      sx: {
+                        '& fieldset': {
+                          border: 'none',
+                        },
+                      },
+                    }}
+                    sx={{
+                      '& .MuiInputBase-input': {
+                        fontSize: '0.7rem',
+                        padding: '8px',
+                        minWidth: '100px',
+                      },
+                    }}
+                  />
+                </TableCell>
+                <TableCell>
+                  <TextField
+                    fullWidth
+                    id="lastnameBeneficiary"
+                    name="lastnameBeneficiary"
+                    value={row.lastnameBeneficiary}
+                    onChange={(e) => handleTableInputChange(index, e)}
+                    variant="outlined"
+                    margin="dense"
+                    InputProps={{
+                      disableUnderline: true,
+                      sx: {
+                        '& fieldset': {
+                          border: 'none',
+                        },
+                      },
+                    }}
+                    sx={{
+                      '& .MuiInputBase-input': {
+                        fontSize: '0.7rem',
+                        padding: '8px',
+                        minWidth: '100px',
+                      },
+                    }}
+                  />
+                </TableCell>
                   <TableCell>
                     <Select
                       fullWidth
@@ -545,6 +719,21 @@ const SeizureOrderComponent = () => {
                       onChange={(e) => handleTableInputChange(index, e)}
                       variant="outlined"
                       margin="dense"
+                      sx={{
+                        '& .MuiInputBase-input': {
+                          fontSize: '0.7rem',
+                          padding: '8px',
+                        },
+                        '& .MuiOutlinedInput-notchedOutline': {
+                          border: 'none',
+                        },
+                        '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                          border: 'none',
+                        },
+                        '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                          border: 'none',
+                        },
+                      }}   
                     >
                       <MenuItem value="">
                         <em>Seleccione...</em>
@@ -564,6 +753,18 @@ const SeizureOrderComponent = () => {
                       margin="dense"
                       InputProps={{
                         disableUnderline: true,
+                        sx: {
+                          '& fieldset': {
+                            border: 'none',
+                          },
+                        },
+                      }}
+                      sx={{
+                        '& .MuiInputBase-input': {
+                          fontSize: '0.7rem',
+                          padding: '8px',
+                          minWidth: '70px',
+                        },
                       }}
                     />
                   </TableCell>
@@ -576,6 +777,21 @@ const SeizureOrderComponent = () => {
                     onChange={(e) => handleTableInputChange(index, e)}
                     variant="outlined"
                     margin="dense"
+                    sx={{
+                      '& .MuiInputBase-input': {
+                        fontSize: '0.7rem',
+                        padding: '8px',
+                      },
+                      '& .MuiOutlinedInput-notchedOutline': {
+                        border: 'none',
+                      },
+                      '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                        border: 'none',
+                      },
+                      '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                        border: 'none',
+                      },
+                    }} 
                   >
                     <MenuItem value="">
                       <em>Seleccione...</em>
@@ -596,6 +812,18 @@ const SeizureOrderComponent = () => {
                     margin="dense"
                     InputProps={{
                       disableUnderline: true,
+                      sx: {
+                        '& fieldset': {
+                          border: 'none',
+                        },
+                      },
+                    }}
+                    sx={{
+                      '& .MuiInputBase-input': {
+                        fontSize: '0.7rem',
+                        padding: '8px',
+                        minWidth: '70px',
+                      },
                     }}
                   />
                 </TableCell>
@@ -608,6 +836,21 @@ const SeizureOrderComponent = () => {
                     onChange={(e) => handleTableInputChange(index, e)}
                     variant="outlined"
                     margin="dense"
+                    sx={{
+                      '& .MuiInputBase-input': {
+                        fontSize: '0.7rem',
+                        padding: '8px',
+                      },
+                      '& .MuiOutlinedInput-notchedOutline': {
+                        border: 'none',
+                      },
+                      '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                        border: 'none',
+                      },
+                      '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                        border: 'none',
+                      },
+                    }}  
                   >
                     <MenuItem value="">
                       <em>Seleccione...</em>
@@ -618,34 +861,6 @@ const SeizureOrderComponent = () => {
                       </MenuItem>
                     ))}
                   </Select>
-                </TableCell>
-                <TableCell>
-                  <TextField
-                    fullWidth
-                    id="nameBeneficiary"
-                    name="nameBeneficiary"
-                    value={row.nameBeneficiary}
-                    onChange={(e) => handleTableInputChange(index, e)}
-                    variant="outlined"
-                    margin="dense"
-                    InputProps={{
-                      disableUnderline: true,
-                    }}
-                  />
-                </TableCell>
-                <TableCell>
-                  <TextField
-                    fullWidth
-                    id="lastnameBeneficiary"
-                    name="lastnameBeneficiary"
-                    value={row.lastnameBeneficiary}
-                    onChange={(e) => handleTableInputChange(index, e)}
-                    variant="outlined"
-                    margin="dense"
-                    InputProps={{
-                      disableUnderline: true,
-                    }}
-                  />
                 </TableCell>
                     <TableCell>
                       <IconButton color="secondary" onClick={() => deleteRow(index)}>
