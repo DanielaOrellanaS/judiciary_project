@@ -21,8 +21,10 @@ const RetentionOrderTableComponent = () => {
     const fetchData = async () => {
       try {
         const bankData = await getBankResponse();
-        const ordersData = (await getOrdersRetention()).filter(order => order.orderType === orderType);
-        console.log("DATOS RECIBIDOS: ", ordersData)
+        const ordersData = (await getOrdersRetention()).filter(order => {
+          console.log('order.numJudgment:', order.numJudgment, 'numJudgment:', numJudgment);
+          return order.orderType === orderType && order.numJudgment == numJudgment;
+        });
 
         if (bankData.length > 0) {
           const combined = ordersData.map(item => {
@@ -49,7 +51,7 @@ const RetentionOrderTableComponent = () => {
     };
 
     fetchData();
-  }, []);
+  }, [numJudgment, orderType]);  
 
   const renderTable = () => {
     return (

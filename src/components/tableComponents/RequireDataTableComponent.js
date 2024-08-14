@@ -21,7 +21,10 @@ const RequireDataTableComponent = () => {
     const fetchData = async () => {
       try {
         const bankData = await getBankResponse();
-        const ordersData = (await getOrders()).filter(order => order.orderType === orderType);
+        const ordersData = (await getOrders()).filter(order => {
+          console.log('order.numJudgment:', order.numJudgment, 'numJudgment:', numJudgment);
+          return order.orderType === orderType && order.numJudgment == numJudgment;
+        });
         if (bankData.length > 0) {
           const combined = ordersData.map(item => {
             const randomIndex = Math.floor(Math.random() * bankData.length);
@@ -46,7 +49,7 @@ const RequireDataTableComponent = () => {
     };
 
     fetchData();
-  }, []);
+  }, [numJudgment, orderType]);  
 
   const renderTable = () => {
     return (
