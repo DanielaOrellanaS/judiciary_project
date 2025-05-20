@@ -12,8 +12,9 @@ import Grid from '@mui/material/Grid';
 import { useNavigate } from 'react-router-dom';
 
 const RequireDataComponent = () => {
-  const location = useLocation();
-  const { numJudgment } = location.state || {};
+  //const location = useLocation();
+  const { state } = useLocation();
+  const numJudgment = state?.numJudgment ?? '';
   const adjudicated = "QUITO CIVIL";
   const orderType = 'RequireData'; 
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ const RequireDataComponent = () => {
     adjudicated: adjudicated || '',
     judge: '',
     mailOrderer: '', 
-    nameOrderer: '', 
+    nameOrderer: 'Judiciary', 
     positionOrderer: '',
     name: '',
     lastname: '', 
@@ -78,6 +79,7 @@ const RequireDataComponent = () => {
   };
 
   const handleFormSubmit = async () => {
+    console.log('Datos que se van a enviar:', formData);
     try {
       const response = await saveJudgment(formData);
       if (response.ok) {
